@@ -55,7 +55,7 @@ export default function AppShell({ children }) {
 
   return (
     <Page>
-      <PhoneFrame>
+      <PhoneFrame data-phone-frame="true">
         <ContentWrapper>{children}</ContentWrapper>
         {showBottomNav && <BottomNav />}
       </PhoneFrame>

@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import ClubSelector from "../components/ClubSelector/ClubSelector.jsx";
 
 const Container = styled.div`
   width: 100%;
@@ -8,6 +10,14 @@ const Container = styled.div`
   overflow-y: auto;
   position: relative;
   background: #222222;
+`;
+
+const Header = styled.div`
+  position: relative;
+  padding-top: 61px; /* StatusBar 높이 */
+  padding-left: 35px;
+  padding-right: 35px;
+  padding-bottom: 20px;
 `;
 
 const PraiseButton = styled.button`
@@ -46,14 +56,36 @@ const PraiseButton = styled.button`
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const [selectedClubId, setSelectedClubId] = useState("1");
+
+  // 동아리 목록 (실제로는 API에서 가져올 데이터)
+  const clubs = [
+    { id: "1", name: "멋쟁이사자처럼", university: "숭실대학교" },
+    { id: "2", name: "산들바람", university: "" },
+  ];
+
+  // 선택된 동아리 정보
+  const selectedClub = clubs.find((club) => club.id === selectedClubId) || clubs[0];
 
   const handlePraiseClick = () => {
     navigate("/praise");
   };
 
+  const handleClubChange = (clubId) => {
+    setSelectedClubId(clubId);
+  };
+
   return (
     <Container>
-      <h1>홈 페이지</h1>
+      <Header>
+        <ClubSelector
+          university={selectedClub.university || "숭실대학교"}
+          clubName={selectedClub.name}
+          clubs={clubs}
+          selectedClubId={selectedClubId}
+          onClubChange={handleClubChange}
+        />
+      </Header>
       <PraiseButton onClick={handlePraiseClick}>
         칭찬하러 가기
       </PraiseButton>

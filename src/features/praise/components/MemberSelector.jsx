@@ -3,8 +3,8 @@ import styled from "styled-components";
 const UsersGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-  margin-top: 20px;
+  gap: 10px;
+  margin-top: 16px;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
@@ -22,8 +22,13 @@ const UserCard = styled.button`
   gap: 17px;
   padding: 11px 77px 11px 77px;
   cursor: pointer;
+  outline: none;
   box-shadow: ${(props) =>
     props.$selected ? "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" : "none"};
+  
+  &:focus {
+    outline: none;
+  }
 `;
 
 const UserIcon = styled.div`

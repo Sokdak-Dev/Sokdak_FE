@@ -2,7 +2,7 @@
   {
     "id": 1,
     "name": "첫 칭찬",
-    "imageUrl": "http://localhost:3845/assets/b78e29d981f00ab476b3b3a00ead5e3f9018c3b4.svg",
+    "imageUrl": "/assets/badge.png",
     "isEarned": true
   },
   {

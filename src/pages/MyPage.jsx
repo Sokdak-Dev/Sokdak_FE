@@ -31,6 +31,14 @@ const ScrollableContent = styled.div`
   overflow-x: hidden;
   width: 100%;
   min-height: 0;
+  
+  /* 스크롤바 숨기기 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
 `;
 
 const MessagesContainer = styled.div`

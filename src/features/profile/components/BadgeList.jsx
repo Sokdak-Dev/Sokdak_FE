@@ -28,12 +28,21 @@ const BadgeImage = styled.img`
   object-fit: contain;
 `;
 
-const LockOverlay = styled.img`
+const LockContainer = styled.div`
+  width: 75px;
+  height: 75px;
+  position: relative;
+  background: #353535;
+  border-radius: 15px;
+`;
+
+const LockIcon = styled.img`
+  width: 22px;
+  height: 28px;
   position: absolute;
-  width: 60px;
-  height: 60px;
+  left: 27px;
+  top: 24px;
   object-fit: contain;
-  z-index: 1;
 `;
 
 export default function BadgeList({ badges: badgesProp }) {
@@ -60,19 +69,15 @@ export default function BadgeList({ badges: badgesProp }) {
     <BadgeGrid>
       {badges.map((badge) => (
         <BadgeItem key={badge.id}>
-          {/* 뱃지 기본 이미지 */}
-          <BadgeImage 
-            src={badge.imageUrl} 
-            alt={badge.name}
-            style={{
-              opacity: badge.isEarned ? 1 : 0.5,
-            }}
-          />
-          {/* isEarned에 따라 오버레이 표시 */}
           {badge.isEarned ? (
-            <LockOverlay src="/assets/badge.png" alt="획득" />
+            <BadgeImage 
+              src={badge.imageUrl} 
+              alt={badge.name}
+            />
           ) : (
-            null
+            <LockContainer>
+              <LockIcon src="/assets/badge-lock.svg" alt="잠금" />
+            </LockContainer>
           )}
         </BadgeItem>
       ))}

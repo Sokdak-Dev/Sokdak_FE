@@ -50,6 +50,7 @@ const AddButton = styled.button`
   cursor: pointer;
   padding: 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  outline: none;
   
   &:hover {
     background: #f0f0f0;
@@ -57,6 +58,14 @@ const AddButton = styled.button`
   
   &:active {
     background: #e0e0e0;
+  }
+  
+  &:focus {
+    outline: none;
+  }
+  
+  &:focus-visible {
+    outline: none;
   }
 `;
 
@@ -150,6 +159,7 @@ const IconButton = styled.button`
   justify-content: center;
   position: relative;
   z-index: 1;
+  outline: none;
   
   &:hover {
     opacity: 0.8;
@@ -157,6 +167,14 @@ const IconButton = styled.button`
   
   &:active {
     opacity: 0.6;
+  }
+  
+  &:focus {
+    outline: none;
+  }
+  
+  &:focus-visible {
+    outline: none;
   }
 `;
 

@@ -92,7 +92,7 @@ const CategoryText = styled.p`
   font-family: "Inter", "Noto Sans KR", sans-serif;
   font-weight: bold;
   font-size: 16px;
-  color: #cfcfcf;
+  color: #ffffff;
   text-align: center;
   margin: 0;
 `;

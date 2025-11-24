@@ -84,6 +84,12 @@ const SearchResultItem = styled.button`
   &:hover {
     opacity: 0.8;
   }
+  
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    border: none;
+  }
 `;
 
 const SearchResultText = styled.span`

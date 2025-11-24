@@ -55,6 +55,12 @@ const BackButton = styled.button`
   &:hover {
     opacity: 0.8;
   }
+  
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    border: none;
+  }
 `;
 
 const ChevronIcon = styled.svg`
@@ -90,6 +96,12 @@ const CompleteButton = styled.button`
   
   &:active {
     opacity: 0.6;
+  }
+  
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    border: none;
   }
 `;
 

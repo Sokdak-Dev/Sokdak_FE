@@ -16,6 +16,7 @@ const OptionItem = styled.button`
   background: none;
   border: none;
   border-bottom: 2px solid #585858;
+  border-radius: 0;
   cursor: pointer;
   outline: none;
   width: 100%;
@@ -26,6 +27,11 @@ const OptionItem = styled.button`
   
   &:active {
     opacity: 0.6;
+  }
+  
+  &:focus,
+  &:focus-visible {
+    outline: none;
   }
 `;
 

@@ -9,7 +9,7 @@ const Container = styled.div`
   background: #222222;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow: hidden;
   position: relative;
 `;
 
@@ -43,6 +43,12 @@ const BackButton = styled.button`
   
   &:hover {
     opacity: 0.8;
+  }
+  
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    border: none;
   }
 `;
 
@@ -111,6 +117,11 @@ const ChangeImageButton = styled.button`
   &:active {
     opacity: 0.8;
   }
+  
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
 `;
 
 const FormSection = styled.div`
@@ -156,27 +167,10 @@ const FieldValue = styled.div`
   &:hover {
     color: #2ab7ca;
   }
-`;
-
-const Input = styled.input`
-  flex: 1;
-  border: none;
-  border-bottom: 1px solid #585858;
-  background: transparent;
-  font-family: 'Pretendard', sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 18px;
-  color: #cfcfcf;
-  padding: 9px 0;
-  outline: none;
   
-  &:focus {
-    border-bottom-color: #2ab7ca;
-  }
-  
-  &::placeholder {
-    color: #6f6f6f;
+  &:focus,
+  &:focus-visible {
+    outline: none;
   }
 `;
 
@@ -219,6 +213,12 @@ const DeleteButton = styled.button`
   &:hover {
     color: #ff4444;
   }
+  
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    border: none;
+  }
 `;
 
 const AddClubButton = styled.button`
@@ -232,6 +232,12 @@ const AddClubButton = styled.button`
   cursor: pointer;
   outline: none;
   width: 100%;
+  
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    border: none;
+  }
 `;
 
 const AddClubText = styled.span`

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import { useAuth } from '../../../hooks/useAuth.js';
+import { useAuth } from '../../auth/useAuth.js';
 
 const Overlay = styled.div`
   position: fixed;

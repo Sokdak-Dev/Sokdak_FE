@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { useAuth } from '../hooks/useAuth.js';
+import { useAuth } from '../features/auth/useAuth.js';
 import NameFieldEditor from '../features/profile/components/NameFieldEditor.jsx';
 import UniversityFieldEditor from '../features/profile/components/UniversityFieldEditor.jsx';
 import GenderFieldEditor from '../features/profile/components/GenderFieldEditor.jsx';

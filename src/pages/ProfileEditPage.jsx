@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useAuth } from '../hooks/useAuth.js';
+import { useAuth } from '../features/auth/useAuth.js';
 
 const Container = styled.div`
   width: 100%;
@@ -248,6 +248,80 @@ const AddClubText = styled.span`
   color: #9f9f9f;
 `;
 
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: #353535;
+  border-radius: 12px;
+  padding: 24px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+const ModalMessage = styled.p`
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #cfcfcf;
+  margin: 0;
+  text-align: center;
+`;
+
+const ModalButtons = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const ModalButton = styled.button`
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+`;
+
+const CancelButton = styled(ModalButton)`
+  background: #50555c;
+  color: #cfcfcf;
+  
+  &:hover {
+    background: #5a5f66;
+  }
+`;
+
+const ConfirmButton = styled(ModalButton)`
+  background: #ff4444;
+  color: #ffffff;
+  
+  &:hover {
+    background: #ff5555;
+  }
+`;
+
 export default function ProfileEditPage() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
@@ -256,6 +330,8 @@ export default function ProfileEditPage() {
   const [university, setUniversity] = useState('');
   const [clubs, setClubs] = useState([]);
   const [profileImage, setProfileImage] = useState('');
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const [selectedClub, setSelectedClub] = useState(null);
 
   // 사용자 정보로 폼 초기화
   useEffect(() => {
@@ -291,9 +367,25 @@ export default function ProfileEditPage() {
     input.click();
   };
 
-  // 동아리 삭제
-  const handleDeleteClub = (clubId) => {
-    setClubs(clubs.filter(club => club.id !== clubId));
+  // 동아리 탈퇴 모달 열기
+  const handleLeaveClubClick = (club) => {
+    setSelectedClub(club);
+    setShowLeaveModal(true);
+  };
+
+  // 동아리 탈퇴 확인
+  const handleConfirmLeave = () => {
+    if (selectedClub) {
+      setClubs(clubs.filter(club => club.id !== selectedClub.id));
+      setShowLeaveModal(false);
+      setSelectedClub(null);
+    }
+  };
+
+  // 탈퇴 모달 닫기
+  const handleCancelLeave = () => {
+    setShowLeaveModal(false);
+    setSelectedClub(null);
   };
 
   // 동아리 추가
@@ -388,8 +480,8 @@ export default function ProfileEditPage() {
             {clubs.map((club) => (
               <ClubItem key={club.id}>
                 <ClubName>{club.name}</ClubName>
-                <DeleteButton onClick={() => handleDeleteClub(club.id)}>
-                  삭제
+                <DeleteButton onClick={() => handleLeaveClubClick(club)}>
+                  탈퇴
                 </DeleteButton>
               </ClubItem>
             ))}
@@ -406,6 +498,24 @@ export default function ProfileEditPage() {
           </FieldValue>
         </FormRow>
       </FormSection>
+
+      {showLeaveModal && selectedClub && (
+        <ModalOverlay onClick={handleCancelLeave}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalMessage>
+              {selectedClub.name}에서 탈퇴하시겠습니까?
+            </ModalMessage>
+            <ModalButtons>
+              <CancelButton onClick={handleCancelLeave}>
+                취소
+              </CancelButton>
+              <ConfirmButton onClick={handleConfirmLeave}>
+                탈퇴하기
+              </ConfirmButton>
+            </ModalButtons>
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </Container>
   );
 }

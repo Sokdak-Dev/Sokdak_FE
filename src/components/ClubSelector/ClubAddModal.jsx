@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useAuth } from "../../hooks/useAuth.js";
+import { useAuth } from "../../features/auth/useAuth.js";
 
 const Overlay = styled.div`
   position: absolute;

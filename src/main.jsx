@@ -12,7 +12,7 @@ import PraisePage from "./pages/PraisePage.jsx";
 import ProfileEditPage from "./pages/ProfileEditPage.jsx";
 import ProfileFieldEditPage from "./pages/ProfileFieldEditPage.jsx";
 import ClubSearch from "./features/club/components/ClubSearch.jsx";
-import { AuthProvider } from "./hooks/AuthProvider.jsx";
+import { AuthProvider } from "./features/auth/AuthProvider.jsx";
 
 const router = createBrowserRouter([
   {

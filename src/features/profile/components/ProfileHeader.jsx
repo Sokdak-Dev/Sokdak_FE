@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../hooks/useAuth.js";
+import { useAuth } from "../../auth/useAuth.js";
 import SettingsModal from "./SettingsModal.jsx";
 
 // 로컬 assets 아이콘 경로

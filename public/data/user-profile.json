@@ -2,6 +2,7 @@
   "id": 1,
   "name": "이정안",
   "university": "숭실대학교",
+  "gender": "여성",
   "profileImage": "/assets/profile-mock.jpg",
   "clubs": [
     {

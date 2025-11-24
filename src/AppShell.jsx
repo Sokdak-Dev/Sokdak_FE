@@ -51,7 +51,10 @@ const ContentWrapper = styled.div`
 
 export default function AppShell({ children }) {
   const location = useLocation();
-  const showBottomNav = location.pathname !== "/praise" && location.pathname !== "/club/search";
+  const showBottomNav = 
+    location.pathname !== "/praise" && 
+    location.pathname !== "/club/search" &&
+    !location.pathname.startsWith("/profile/edit");
 
   return (
     <Page>

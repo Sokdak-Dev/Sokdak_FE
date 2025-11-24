@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import useProfile from "../../features/profile/hooks/useProfile.js";
+import { useAuth } from "../../hooks/useAuth.js";
 
 const Overlay = styled.div`
   position: absolute;
@@ -177,7 +177,7 @@ export default function ClubAddModal({
 }) {
   const navigate = useNavigate();
   const [phoneFrame, setPhoneFrame] = useState(null);
-  const { data: profileData } = useProfile();
+  const { user: profileData } = useAuth();
 
   // PhoneFrame 찾기
   useEffect(() => {

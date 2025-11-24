@@ -11,32 +11,6 @@ const Container = styled.div`
   overflow: hidden;
 `;
 
-const StatusBar = styled.div`
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 394px;
-  height: 61px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 27px;
-  box-sizing: border-box;
-`;
-
-const Time = styled.p`
-  font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 600;
-  font-size: 17px;
-  line-height: 22px;
-  color: white;
-  margin: 0;
-  position: absolute;
-  left: 54px;
-  top: 20px;
-`;
-
 const BackButton = styled.button`
   position: absolute;
   left: 23px;
@@ -59,23 +33,13 @@ const BackButton = styled.button`
     opacity: 0.6;
   }
   
-  svg {
+  img {
     width: 100%;
     height: 100%;
+    object-fit: contain;
   }
 `;
 
-const ChevronLeftIcon = () => (
-  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M23.33 13.33L16.67 20L23.33 26.67"
-      stroke="#cfcfcf"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
 
 const Title = styled.p`
   font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -85,9 +49,11 @@ const Title = styled.p`
   color: #cfcfcf;
   margin: 0;
   position: absolute;
-  left: 30px;
+  left: 50%;
+  transform: translateX(-50%);
   top: 133px;
-  width: 250px;
+  width: 333px;
+  text-align: left;
 `;
 
 const SearchContainer = styled.div`
@@ -224,7 +190,7 @@ const Divider = styled.div`
 const NextButton = styled.button`
   position: absolute;
   left: 50%;
-  top: 707px;
+  bottom: calc(100vh * 87 / 844);
   transform: translateX(-50%);
   width: 333px;
   height: 50px;
@@ -304,11 +270,8 @@ export default function ClubSearch() {
   if (loading) {
     return (
       <Container>
-        <StatusBar>
-          <Time>9:41</Time>
-        </StatusBar>
         <BackButton onClick={handleBack}>
-          <ChevronLeftIcon />
+          <img src="/assets/Chevron_Left.svg" alt="뒤로 가기" />
         </BackButton>
         <Title>동아리를 선택해 주세요</Title>
         <SearchContainer>
@@ -325,11 +288,8 @@ export default function ClubSearch() {
   if (error) {
     return (
       <Container>
-        <StatusBar>
-          <Time>9:41</Time>
-        </StatusBar>
         <BackButton onClick={handleBack}>
-          <ChevronLeftIcon />
+          <img src="/assets/Chevron_Left.svg" alt="뒤로 가기" />
         </BackButton>
         <Title>동아리를 선택해 주세요</Title>
         <SearchContainer>
@@ -344,13 +304,9 @@ export default function ClubSearch() {
   }
 
   return (
-    <Container>
-      <StatusBar>
-        <Time>9:41</Time>
-      </StatusBar>
-      
+    <Container>      
       <BackButton onClick={handleBack}>
-        <ChevronLeftIcon />
+        <img src="/assets/Chevron_Left.svg" alt="뒤로 가기" />
       </BackButton>
       
       <Title>동아리를 선택해 주세요</Title>

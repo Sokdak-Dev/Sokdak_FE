@@ -1,8 +1,6 @@
 import { Outlet } from "react-router-dom";
 import AppShell from "./AppShell.jsx";
 import { createGlobalStyle } from "styled-components";
-// TODO: useProfile hook이 구현되면 아래 주석을 해제하고 사용하세요
-// import useProfile from "./features/profile/hooks/useProfile.js";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -32,15 +30,10 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
-  // TODO: useProfile hook이 구현되면 아래 주석을 해제하고 사용하세요
-  // const { userProfile, loading } = useProfile();
-  const userProfile = null;
-  const loading = false;
-
   return (
     <AppShell>
       <GlobalStyle />
-      <Outlet context={{ userProfile, isUserProfileLoading: loading }} />
+      <Outlet />
     </AppShell>
   );
 }

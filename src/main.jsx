@@ -9,7 +9,10 @@ import RankingPage from "./pages/RankingPage.jsx";
 import ClubPage from "./pages/ClubPage.jsx";
 import MyPage from "./pages/MyPage.jsx";
 import PraisePage from "./pages/PraisePage.jsx";
+import ProfileEditPage from "./pages/ProfileEditPage.jsx";
+import ProfileFieldEditPage from "./pages/ProfileFieldEditPage.jsx";
 import ClubSearch from "./features/club/components/ClubSearch.jsx";
+import { AuthProvider } from "./hooks/AuthProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +40,14 @@ const router = createBrowserRouter([
         element: <MyPage />,
       },
       {
+        path: "profile/edit",
+        element: <ProfileEditPage />,
+      },
+      {
+        path: "profile/edit/:fieldType",
+        element: <ProfileFieldEditPage />,
+      },
+      {
         path: "praise",
         element: <PraisePage />,
       },
@@ -46,6 +57,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );

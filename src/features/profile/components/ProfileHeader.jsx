@@ -1,5 +1,8 @@
 import styled from "styled-components";
-import useProfile from "../hooks/useProfile.js";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth.js";
+import SettingsModal from "./SettingsModal.jsx";
 
 // 로컬 assets 아이콘 경로
 const SETTING_ICON = "/assets/profile-setting.svg";
@@ -191,22 +194,44 @@ const EditIcon = styled.img`
 `;
 
 export default function ProfileHeader({ profile: profileProp }) {
-  const { data: profileData, loading, error } = useProfile();
+  const { user: profileData, loading, error, updateUser } = useAuth();
   const profile = profileProp || profileData;
+  const navigate = useNavigate();
+  
+  // 모달 상태 관리
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
+  // 설정 모달 열기
   const handleSettingClick = () => {
-    console.log("Setting clicked");
-    // TODO: 설정 페이지로 이동
+    setIsSettingsModalOpen(true);
   };
 
+  // 프로필 편집 페이지로 이동
   const handleEditClick = () => {
-    console.log("Edit clicked");
-    // TODO: 프로필 편집 모달 열기
+    navigate('/profile/edit');
   };
 
+  // 프로필 이미지 변경
   const handleAddClick = () => {
-    console.log("Add clicked");
-    // TODO: 프로필 이미지 추가/변경
+    // 간단한 예시: 파일 입력 다이얼로그
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        // 파일을 읽어서 미리보기 URL 생성
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const imageUrl = event.target.result;
+          // updateUser()로 프로필 이미지 업데이트
+          updateUser({ profileImage: imageUrl });
+          alert('프로필 이미지가 변경되었습니다!');
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
   };
 
   if (loading) {
@@ -268,6 +293,12 @@ export default function ProfileHeader({ profile: profileProp }) {
           </ClubsList>
         </ProfileInfo>
       </ProfileSection>
+
+      {/* 설정 모달 */}
+      <SettingsModal
+        isOpen={isSettingsModalOpen}
+        onClose={() => setIsSettingsModalOpen(false)}
+      />
     </HeaderContainer>
   );
 }

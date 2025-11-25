@@ -1,7 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
 import styled from "styled-components";
-import useClubs from "../features/club/hooks/useClubs.js";
+import { useSelectedClub } from "../features/club/useSelectedClub.js";
 
 const NavContainer = styled.nav`
   position: relative;
@@ -145,21 +144,14 @@ const MyPageIcon = () => {
 export default function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { data: clubs } = useClubs();
-  const [defaultClubId, setDefaultClubId] = useState(null);
-
-  // 기본 동아리 ID 설정
-  useEffect(() => {
-    if (clubs && clubs.length > 0 && !defaultClubId) {
-      setDefaultClubId(clubs[0].id);
-    }
-  }, [clubs, defaultClubId]);
+  const { selectedClub, userClubs } = useSelectedClub();
 
   const handleClubClick = () => {
-    if (defaultClubId) {
-      navigate(`/club/${defaultClubId}`);
+    // 선택된 동아리가 있으면 그 동아리로, 없으면 첫 번째 동아리로 이동
+    const clubId = selectedClub?.id || (userClubs.length > 0 ? userClubs[0].id : null);
+    if (clubId) {
+      navigate(`/club/${clubId}`);
     }
-    // defaultClubId가 없으면 아무것도 하지 않음 (로딩 중)
   };
 
   const navItems = [

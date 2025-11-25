@@ -1,17 +1,20 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import ClubSelector from "../components/ClubSelector/ClubSelector.jsx";
 import useClub from "../features/club/hooks/useClub.js";
-import useClubs from "../features/club/hooks/useClubs.js";
 import useClubMembers from "../features/club/hooks/useClubMembers.js";
+import { useSelectedClub } from "../features/club/useSelectedClub.js";
+import { useAuth } from "../features/auth/useAuth.js";
 
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  padding-bottom: 80px; /* BottomNav 높이만큼 여백 */
-  overflow-y: auto;
+  overflow-y: ${props => props.$needsScroll ? 'auto' : 'hidden'};
+  overflow-x: hidden;
   position: relative;
   background: #222222;
+  box-sizing: border-box;
 `;
 
 const Header = styled.div`
@@ -28,6 +31,7 @@ const ClubInfoSection = styled.div`
   gap: 10px;
   margin-top: 27px;
   margin-left: 42px;
+  margin-bottom: 40px;
 `;
 
 const MemberIcon = styled.div`
@@ -50,6 +54,8 @@ const MemberCount = styled.div`
   align-items: baseline;
   gap: 0;
   position: relative;
+  height: 56px;
+  min-width: 100px;
 `;
 
 const CountNumber = styled.p`
@@ -58,11 +64,7 @@ const CountNumber = styled.p`
   font-size: 50px;
   line-height: 1;
   color: #9f9f9f;
-  margin: 0;
-  position: absolute;
-  left: 31.5px;
-  top: 0;
-  transform: translateX(-50%);
+  margin-right: 5px;
 `;
 
 const CountUnit = styled.p`
@@ -72,10 +74,7 @@ const CountUnit = styled.p`
   line-height: 1;
   color: #9f9f9f;
   margin: 0;
-  position: absolute;
-  left: 79.5px;
-  top: 30px;
-  transform: translateX(-50%);
+  margin-left: 0;
 `;
 
 const SectionTitle = styled.h2`
@@ -159,7 +158,7 @@ const MemberName = styled.p`
 const MemberList = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 30px;
+  margin: 0 30px 80px 30px; /* BottomNav 높이만큼 하단 여백 */
 `;
 
 const MemberItem = styled.div`
@@ -179,18 +178,50 @@ const MemberItem = styled.div`
 export default function ClubPage() {
   const { clubId } = useParams();
   const navigate = useNavigate();
-  const { data: clubs, loading: clubsLoading } = useClubs();
+  const { user: profileData, setSelectedClubId } = useAuth();
+  const { userClubs, changeSelectedClub } = useSelectedClub();
   const { data: club, loading: clubLoading, error: clubError } = useClub(clubId);
   const { data: membersData, loading: membersLoading, error: membersError } = useClubMembers(clubId);
+  const containerRef = useRef(null);
+  const contentRef = useRef(null);
+  const [needsScroll, setNeedsScroll] = useState(false);
+
+  // URL의 clubId가 변경되면 사용자 정보도 업데이트
+  useEffect(() => {
+    if (clubId && clubId !== profileData?.selectedClubId) {
+      setSelectedClubId(clubId);
+    }
+  }, [clubId, profileData?.selectedClubId, setSelectedClubId]);
+
+  // 콘텐츠 높이 체크하여 스크롤 필요 여부 결정
+  useEffect(() => {
+    const checkScroll = () => {
+      if (containerRef.current && contentRef.current) {
+        const containerHeight = containerRef.current.clientHeight;
+        const contentHeight = contentRef.current.scrollHeight;
+        setNeedsScroll(contentHeight > containerHeight);
+      }
+    };
+
+    checkScroll();
+    // 리사이즈 이벤트 리스너 추가
+    window.addEventListener('resize', checkScroll);
+    // 데이터 로딩 후에도 체크
+    const timer = setTimeout(checkScroll, 100);
+
+    return () => {
+      window.removeEventListener('resize', checkScroll);
+      clearTimeout(timer);
+    };
+  }, [club, membersData, clubLoading, membersLoading]);
 
   // clubId는 항상 있어야 함 (라우팅에서 보장)
   if (!clubId) {
     return null; // loader에서 리다이렉트되므로 여기 도달하지 않음
   }
 
-  const currentClubId = clubId;
-
   const handleClubChange = (newClubId) => {
+    changeSelectedClub(newClubId);
     navigate(`/club/${newClubId}`);
   };
 
@@ -199,83 +230,96 @@ export default function ClubPage() {
   const members = membersData?.members || [];
   const memberCount = membersData?.memberCount || 0;
 
-  if (clubLoading || clubsLoading || membersLoading) {
+  if (clubLoading || membersLoading) {
     return (
-      <Container>
-        <Header>
-          <p style={{ color: "#cfcfcf" }}>로딩 중...</p>
-        </Header>
+      <Container ref={containerRef} $needsScroll={false}>
+        <div ref={contentRef}>
+          <Header>
+            <p style={{ color: "#cfcfcf" }}>로딩 중...</p>
+          </Header>
+        </div>
       </Container>
     );
   }
 
   if (clubError || !club) {
     return (
-      <Container>
-        <Header>
-          <p style={{ color: "#cfcfcf" }}>동아리를 찾을 수 없습니다.</p>
-        </Header>
+      <Container ref={containerRef} $needsScroll={false}>
+        <div ref={contentRef}>
+          <Header>
+            <p style={{ color: "#cfcfcf" }}>동아리를 찾을 수 없습니다.</p>
+          </Header>
+        </div>
       </Container>
     );
   }
 
   if (membersError) {
     return (
-      <Container>
-        <Header>
-          <p style={{ color: "#cfcfcf" }}>멤버 정보를 불러올 수 없습니다.</p>
-        </Header>
+      <Container ref={containerRef} $needsScroll={false}>
+        <div ref={contentRef}>
+          <Header>
+            <p style={{ color: "#cfcfcf" }}>멤버 정보를 불러올 수 없습니다.</p>
+          </Header>
+        </div>
       </Container>
     );
   }
 
-  const selectedClub = club;
-  const allClubs = clubs || [];
-
   return (
-    <Container>
-      <Header>
-        <ClubSelector
-          university={selectedClub.university || ""}
-          clubName={selectedClub.name}
-          clubs={allClubs}
-          selectedClubId={currentClubId}
-          onClubChange={handleClubChange}
-        />
-      </Header>
+    <Container ref={containerRef} $needsScroll={needsScroll}>
+      <div ref={contentRef}>
+        <Header>
+          <ClubSelector
+            university={club.university || ""}
+            clubName={club.name}
+            clubs={userClubs}
+            selectedClubId={clubId}
+            onClubChange={handleClubChange}
+          />
+        </Header>
 
-      <ClubInfoSection>
-        <MemberIcon>
-          {/* TODO: 실제 멤버 아이콘 이미지 사용 */}
-          <div style={{
-            width: '60px',
-            height: '56px',
-            background: '#585858',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#9f9f9f',
-            fontSize: '24px'
-          }}>
-            👥
-          </div>
-        </MemberIcon>
-        <MemberCount>
-          <CountNumber>{memberCount}</CountNumber>
-          <CountUnit>명</CountUnit>
-        </MemberCount>
-      </ClubInfoSection>
+        <ClubInfoSection>
+          <MemberIcon>
+            <img src="/assets/Group.svg" alt="멤버 아이콘" />
+          </MemberIcon>
+          <MemberCount>
+            <CountNumber>{memberCount}</CountNumber>
+            <CountUnit>명</CountUnit>
+          </MemberCount>
+        </ClubInfoSection>
 
-      <SectionTitle>우리 동아리 칭찬왕</SectionTitle>
-      <RankingList>
-        {topMembers.map((member) => {
-          const RankComponent = member.rank === 1 ? RankNumber1 : 
-                                member.rank === 2 ? RankNumber2 : 
-                                RankNumber3;
-          return (
-            <RankingItem key={member.id}>
-              <RankComponent>{member.rank}</RankComponent>
+        <SectionTitle>우리 동아리 칭찬왕</SectionTitle>
+        <RankingList>
+          {topMembers.map((member) => {
+            const RankComponent = member.rank === 1 ? RankNumber1 : 
+                                  member.rank === 2 ? RankNumber2 : 
+                                  RankNumber3;
+            return (
+              <RankingItem key={member.id}>
+                <RankComponent>{member.rank}</RankComponent>
+                <ProfileImage>
+                  {member.profileImage ? (
+                    <img src={member.profileImage} alt={member.name} />
+                  ) : (
+                    <div style={{
+                      width: '100%',
+                      height: '100%',
+                      background: '#585858',
+                      borderRadius: '50%'
+                    }} />
+                  )}
+                </ProfileImage>
+                <MemberName>{member.name}</MemberName>
+              </RankingItem>
+            );
+          })}
+        </RankingList>
+
+        <SectionTitle>우리 동아리 멤버</SectionTitle>
+        <MemberList>
+          {members.map((member) => (
+            <MemberItem key={member.id}>
               <ProfileImage>
                 {member.profileImage ? (
                   <img src={member.profileImage} alt={member.name} />
@@ -289,31 +333,10 @@ export default function ClubPage() {
                 )}
               </ProfileImage>
               <MemberName>{member.name}</MemberName>
-            </RankingItem>
-          );
-        })}
-      </RankingList>
-
-      <SectionTitle>우리 동아리 멤버</SectionTitle>
-      <MemberList>
-        {members.map((member) => (
-          <MemberItem key={member.id}>
-            <ProfileImage>
-              {member.profileImage ? (
-                <img src={member.profileImage} alt={member.name} />
-              ) : (
-                <div style={{
-                  width: '100%',
-                  height: '100%',
-                  background: '#585858',
-                  borderRadius: '50%'
-                }} />
-              )}
-            </ProfileImage>
-            <MemberName>{member.name}</MemberName>
-          </MemberItem>
-        ))}
-      </MemberList>
+            </MemberItem>
+          ))}
+        </MemberList>
+      </div>
     </Container>
   );
 }

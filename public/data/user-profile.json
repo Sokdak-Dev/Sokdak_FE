@@ -4,13 +4,14 @@
   "university": "숭실대학교",
   "gender": "여성",
   "profileImage": "/assets/profile-mock.jpg",
+  "selectedClubId": "1",
   "clubs": [
     {
       "id": 1,
       "name": "멋쟁이사자처럼"
     },
     {
-      "id": 2,
+      "id": 4,
       "name": "산들바람"
     }
   ]

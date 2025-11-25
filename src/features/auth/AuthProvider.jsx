@@ -39,6 +39,10 @@ export function AuthProvider({ children }) {
           if (!userData.gender) {
             userData.gender = '여성';
           }
+          // selectedClubId가 없으면 첫 번째 동아리로 설정
+          if (!userData.selectedClubId && userData.clubs && userData.clubs.length > 0) {
+            userData.selectedClubId = userData.clubs[0].id.toString();
+          }
           setUser(userData);
         }
       } catch (err) {
@@ -85,6 +89,19 @@ export function AuthProvider({ children }) {
     }));
   };
 
+  /**
+   * 선택된 동아리 변경 함수
+   */
+  const setSelectedClubId = (clubId) => {
+    setUser((prevUser) => {
+      if (!prevUser) return prevUser;
+      return {
+        ...prevUser,
+        selectedClubId: clubId.toString(),
+      };
+    });
+  };
+
   // Context에 제공할 값
   const value = useMemo(
     () => ({
@@ -94,6 +111,7 @@ export function AuthProvider({ children }) {
       login,
       logout,
       updateUser,
+      setSelectedClubId,
     }),
     [user, loading, error]
   );

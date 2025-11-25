@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useAuth } from "../../features/auth/useAuth.js";
+import { useSelectedClub } from "../../features/club/useSelectedClub.js";
 
 const Overlay = styled.div`
   position: absolute;
@@ -179,7 +179,7 @@ export default function ClubAddModal({
 }) {
   const navigate = useNavigate();
   const [phoneFrame, setPhoneFrame] = useState(null);
-  const { user: profileData } = useAuth();
+  const { userClubs } = useSelectedClub();
 
   // PhoneFrame 찾기
   useEffect(() => {
@@ -219,16 +219,8 @@ export default function ClubAddModal({
     navigate("/club/search");
   };
 
-  // 프로필 데이터에서 사용자가 가입한 동아리 목록만 가져오기
-  // clubs.json의 모든 동아리는 검색용이므로 여기서는 사용하지 않음
-  const userClubs = profileData?.clubs?.map((club) => ({
-    id: club.id.toString(),
-    name: club.name,
-    university: profileData.university,
-  })) || [];
-
-  // 항상 사용자가 가입한 동아리만 표시
-  const displayClubs = userClubs;
+  // 전역 상태에서 사용자가 가입한 동아리 목록 사용
+  const displayClubs = userClubs || [];
 
   const modalContent = (
     <Overlay onClick={handleOverlayClick}>

@@ -1,8 +1,7 @@
-import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ClubSelector from "../components/ClubSelector/ClubSelector.jsx";
-import { useAuth } from "../features/auth/useAuth.js";
+import { useSelectedClub } from "../features/club/useSelectedClub.js";
 
 const Container = styled.div`
   width: 100%;
@@ -57,38 +56,18 @@ const PraiseButton = styled.button`
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { user: profileData, loading: authLoading } = useAuth();
-  const [selectedClubId, setSelectedClubId] = useState(null);
-
-  // user-profile.json에서 사용자가 가입한 동아리 목록 가져오기
-  const clubs = useMemo(() => {
-    return profileData?.clubs?.map((club) => ({
-      id: club.id.toString(),
-      name: club.name,
-      university: profileData.university || "",
-    })) || [];
-  }, [profileData]);
-
-  // 초기 선택된 동아리 설정 (첫 번째 동아리)
-  useEffect(() => {
-    if (!selectedClubId && clubs.length > 0) {
-      setSelectedClubId(clubs[0].id);
-    }
-  }, [clubs, selectedClubId]);
-
-  // 선택된 동아리 정보
-  const selectedClub = clubs.find((club) => club.id === selectedClubId) || clubs[0];
+  const { selectedClub, userClubs, loading, changeSelectedClub } = useSelectedClub();
 
   const handlePraiseClick = () => {
     navigate("/praise");
   };
 
   const handleClubChange = (clubId) => {
-    setSelectedClubId(clubId);
+    changeSelectedClub(clubId);
   };
 
   // 로딩 중이거나 동아리가 없을 때
-  if (authLoading) {
+  if (loading) {
     return (
       <Container>
         <Header>
@@ -98,7 +77,7 @@ export default function HomePage() {
     );
   }
 
-  if (!selectedClub || clubs.length === 0) {
+  if (!selectedClub || userClubs.length === 0) {
     return (
       <Container>
         <Header>
@@ -112,10 +91,10 @@ export default function HomePage() {
     <Container>
       <Header>
         <ClubSelector
-          university={selectedClub.university || profileData?.university || ""}
+          university={selectedClub.university || ""}
           clubName={selectedClub.name}
-          clubs={clubs}
-          selectedClubId={selectedClubId}
+          clubs={userClubs}
+          selectedClubId={selectedClub.id}
           onClubChange={handleClubChange}
         />
       </Header>

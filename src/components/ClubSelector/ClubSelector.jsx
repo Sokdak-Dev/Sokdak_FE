@@ -98,7 +98,7 @@ export default function ClubSelector({
     <>
       <Container onClick={handleClick}>
         <ClubInfo>
-          <UniversityName>{university}</UniversityName>
+          {university && <UniversityName>{university}</UniversityName>}
           <ClubName>{clubName}</ClubName>
         </ClubInfo>
         <DropdownIcon>

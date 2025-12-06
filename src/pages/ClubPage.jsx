@@ -187,7 +187,7 @@ export default function ClubPage() {
   const { clubId } = useParams();
   const navigate = useNavigate();
   const { user: profileData, setSelectedClubId } = useAuth();
-  const { userClubs, changeSelectedClub } = useSelectedClub();
+  const { selectedClub, userClubs, changeSelectedClub } = useSelectedClub();
   const { data: club, loading: clubLoading, error: clubError } = useClub(clubId);
   const { data: membersData, loading: membersLoading, error: membersError } = useClubMembers(clubId);
   const containerRef = useRef(null);
@@ -279,7 +279,7 @@ export default function ClubPage() {
       <div ref={contentRef}>
         <Header>
           <ClubSelector
-            university={club.university || ""}
+            university={selectedClub?.university || club.university || ""}
             clubName={club.name}
             clubs={userClubs}
             selectedClubId={clubId}

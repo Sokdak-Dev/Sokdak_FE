@@ -26,10 +26,13 @@ const Container = styled.div`
 `;
 
 const Header = styled.div`
-  position: relative;
-  padding-top: 90px; /* StatusBar 높이 */
-  padding-left: 42px;
-  padding-right: 42px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #222222;
+  padding-top: 61px; /* StatusBar 높이 */
+  padding-left: 35px;
+  padding-right: 35px;
   padding-bottom: 20px;
 `;
 
@@ -139,7 +142,8 @@ const ProfileImage = styled.div`
   width: 31px;
   height: 31px;
   border-radius: 50%;
-  background: #585858;
+  border: 1px solid #50555C;
+  background: none;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -307,16 +311,7 @@ export default function ClubPage() {
               <RankingItem key={member.id}>
                 <RankComponent>{member.rank}</RankComponent>
                 <ProfileImage>
-                  {member.profileImage ? (
-                    <img src={member.profileImage} alt={member.name} />
-                  ) : (
-                    <div style={{
-                      width: '100%',
-                      height: '100%',
-                      background: '#585858',
-                      borderRadius: '50%'
-                    }} />
-                  )}
+                  <img src={member.profileImage || '/assets/profile.svg'} alt={member.name} />
                 </ProfileImage>
                 <MemberName>{member.name}</MemberName>
               </RankingItem>
@@ -329,16 +324,7 @@ export default function ClubPage() {
           {members.map((member) => (
             <MemberItem key={member.id}>
               <ProfileImage>
-                {member.profileImage ? (
-                  <img src={member.profileImage} alt={member.name} />
-                ) : (
-                  <div style={{
-                    width: '100%',
-                    height: '100%',
-                    background: '#585858',
-                    borderRadius: '50%'
-                  }} />
-                )}
+                <img src={member.profileImage || '/assets/profile.svg'} alt={member.name} />
               </ProfileImage>
               <MemberName>{member.name}</MemberName>
             </MemberItem>

@@ -277,7 +277,7 @@ export default function ProfileHeader({ profile: profileProp }) {
 
       <ProfileSection>
         <ProfileImageWrapper>
-          <ProfileImage src={profile.profileImage} alt={profile.name} />
+          <ProfileImage src={profile.profileImage || '/assets/profile.svg'} alt={profile.name} />
           <AddButton onClick={handleAddClick} aria-label="프로필 이미지 추가">
             <AddButtonText>+</AddButtonText>
           </AddButton>

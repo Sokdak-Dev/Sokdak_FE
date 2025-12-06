@@ -39,7 +39,7 @@ const SectionTitle = styled.h2`
 const ComplimentKingsContainer = styled.div`
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 13px;
   padding: 0 0 20px 0;
   position: relative;
@@ -173,18 +173,8 @@ export default function RankingPage() {
     console.error("Failed to load rankings:", error);
   }
 
-  // 순서 조정: 1등은 중앙, 2등은 왼쪽, 3등은 오른쪽
-  const orderedKings = [];
-  if (complimentKings.length >= 3) {
-    const king2 = complimentKings.find((k) => k.rank === 2); // 2등을 왼쪽에
-    const king1 = complimentKings.find((k) => k.rank === 1); // 1등을 중앙에
-    const king3 = complimentKings.find((k) => k.rank === 3); // 3등을 오른쪽에
-    if (king2) orderedKings.push(king2);
-    if (king1) orderedKings.push(king1);
-    if (king3) orderedKings.push(king3);
-  } else {
-    orderedKings.push(...complimentKings);
-  }
+  // 1등부터 순서대로 정렬
+  const orderedKings = [...complimentKings].sort((a, b) => a.rank - b.rank);
 
   if (loading) {
     return (
@@ -205,9 +195,7 @@ export default function RankingPage() {
           {orderedKings.map((king) => (
             <KingCard key={king.rank} $rank={king.rank}>
               <ProfileImage>
-                {king.profileImage && (
-                  <img src={king.profileImage} alt={king.name} />
-                )}
+                <img src={king.profileImage || '/assets/profile.svg'} alt={king.name} />
               </ProfileImage>
               <KingInfo>
                 <RankNumber $rank={king.rank}>{king.rank}</RankNumber>

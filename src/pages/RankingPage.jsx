@@ -39,7 +39,7 @@ const SectionTitle = styled.h2`
 const ComplimentKingsContainer = styled.div`
   display: flex;
   align-items: flex-end;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 13px;
   padding: 0 0 20px 0;
   position: relative;

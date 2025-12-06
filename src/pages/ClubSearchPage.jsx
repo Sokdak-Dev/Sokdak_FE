@@ -214,7 +214,7 @@ const NextButton = styled.button`
   transform: translateX(-50%);
   width: 333px;
   height: 50px;
-  background: ${(props) => (props.disabled ? "#ffd5d2" : "#2AB7CA")};
+  background: ${(props) => (props.disabled ? "#B9D0D3" : "#2AB7CA")};
   border: none;
   border-radius: 10px;
   padding: 11px 77px;

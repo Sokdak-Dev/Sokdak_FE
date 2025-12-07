@@ -13,6 +13,7 @@ import ProfileEditPage from "./pages/ProfileEditPage.jsx";
 import ProfileFieldEditPage from "./pages/ProfileFieldEditPage.jsx";
 import ClubSearchPage from "./pages/ClubSearchPage.jsx";
 import ClubJoinPage from "./pages/ClubJoinPage.jsx";
+import OnboardingPage from "./pages/OnboardingPage.jsx";
 import { AuthProvider } from "./features/auth/AuthProvider.jsx";
 
 const router = createBrowserRouter([
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: "praise",
         element: <PraisePage />,
+      },
+      {
+        path: "onboarding",
+        element: <OnboardingPage />,
       },
     ],
   },

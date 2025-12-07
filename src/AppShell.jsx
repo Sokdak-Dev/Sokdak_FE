@@ -54,6 +54,7 @@ export default function AppShell({ children }) {
   const showBottomNav = 
     location.pathname !== "/praise" && 
     location.pathname !== "/club/search" &&
+    location.pathname !== "/onboarding" &&
     !location.pathname.startsWith("/profile/edit");
 
   return (

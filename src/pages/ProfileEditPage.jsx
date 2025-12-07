@@ -87,14 +87,19 @@ const ProfileImageWrapper = styled.div`
   position: relative;
   width: 110px;
   height: 110px;
+  border-radius: 50%;
+  border: 1px solid #50555c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 `;
 
 const ProfileImage = styled.img`
-  width: 100%;
-  height: 100%;
+  width: ${props => props.$isPlaceholder ? '70%' : '100%'};
+  height: ${props => props.$isPlaceholder ? '70%' : '100%'};
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid #50555c;
 `;
 
 const ChangeImageButton = styled.button`
@@ -453,6 +458,7 @@ export default function ProfileEditPage() {
           <ProfileImage
             src={profileImage || '/assets/profile-mock.jpg'}
             alt="프로필 이미지"
+            $isPlaceholder={!profileImage || profileImage.includes('profile-mock.jpg') || profileImage.includes('profile.svg')}
           />
         </ProfileImageWrapper>
         <ChangeImageButton onClick={handleImageChange}>

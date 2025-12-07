@@ -3,10 +3,9 @@ import styled from "styled-components";
 const Card = styled.div`
   background: #353535;
   border-radius: 10px;
-  width: 100%;
-  max-width: 322px;
+  width: calc(100% - 40px);
   min-height: 121px;
-  margin: 0 auto;
+  margin: 0 20px;
   position: relative;
   padding: 16px 20px;
   box-sizing: border-box;
@@ -15,12 +14,7 @@ const Card = styled.div`
   gap: 0;
   
   @media (max-width: 480px) {
-    max-width: calc(100% - 84px);
     padding: 12px 16px;
-  }
-  
-  @media (min-width: 481px) and (max-width: 768px) {
-    max-width: 90%;
   }
 `;
 

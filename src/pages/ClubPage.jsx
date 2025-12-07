@@ -70,8 +70,8 @@ const ProfileImage = styled.div`
   overflow: hidden;
   
   img {
-    width: 100%;
-    height: 100%;
+    width: ${props => props.$isPlaceholder ? '70%' : '100%'};
+    height: ${props => props.$isPlaceholder ? '70%' : '100%'};
     object-fit: cover;
   }
 `;
@@ -215,7 +215,7 @@ export default function ClubPage() {
         <MemberList>
           {members.map((member) => (
             <MemberItem key={member.id}>
-              <ProfileImage>
+              <ProfileImage $isPlaceholder={!member.profileImage || member.profileImage.includes('profile.svg')}>
                 <img src={member.profileImage || '/assets/profile.svg'} alt={member.name} />
               </ProfileImage>
               <MemberName>{member.name}</MemberName>

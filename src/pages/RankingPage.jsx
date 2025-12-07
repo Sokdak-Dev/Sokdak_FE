@@ -70,10 +70,13 @@ const ProfileImage = styled.div`
   background: #585858;
   margin-bottom: 8px;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   
   img {
-    width: 100%;
-    height: 100%;
+    width: ${props => props.$isPlaceholder ? '70%' : '100%'};
+    height: ${props => props.$isPlaceholder ? '70%' : '100%'};
     object-fit: cover;
   }
 `;
@@ -194,7 +197,7 @@ export default function RankingPage() {
         <ComplimentKingsContainer>
           {orderedKings.map((king) => (
             <KingCard key={king.rank} $rank={king.rank}>
-              <ProfileImage>
+              <ProfileImage $isPlaceholder={!king.profileImage || king.profileImage.includes('profile.svg')}>
                 <img src={king.profileImage || '/assets/profile.svg'} alt={king.name} />
               </ProfileImage>
               <KingInfo>

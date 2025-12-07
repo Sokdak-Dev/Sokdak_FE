@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useLayoutEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ClubSelector from "../components/ClubSelector/ClubSelector.jsx";
@@ -244,7 +244,25 @@ export default function ClubSearchPage() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedClub, setSelectedClub] = useState(null);
+  const searchInputRef = useRef(null);
+  const wasFocusedRef = useRef(false);
+  const cursorPositionRef = useRef(0);
   const { data: clubs, loading, error } = useSearchClubs(searchQuery, true);
+
+  // 입력 필드 포커스 유지 (동기적으로 실행)
+  useLayoutEffect(() => {
+    const input = searchInputRef.current;
+    if (input) {
+      if (document.activeElement === input) {
+        wasFocusedRef.current = true;
+        cursorPositionRef.current = input.selectionStart || 0;
+      } else if (wasFocusedRef.current) {
+        // 포커스가 있었는데 사라진 경우 복원
+        input.focus();
+        input.setSelectionRange(cursorPositionRef.current, cursorPositionRef.current);
+      }
+    }
+  });
 
   // 검색 결과는 최대 4개만 표시
   const searchResults = useMemo(() => {
@@ -264,8 +282,13 @@ export default function ClubSearchPage() {
   };
 
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+    const value = e.target.value;
+    setSearchQuery(value);
     setSelectedClub(null);
+    // 커서 위치 저장
+    if (searchInputRef.current) {
+      cursorPositionRef.current = searchInputRef.current.selectionStart || value.length;
+    }
   };
 
   const handleResultClick = (club) => {
@@ -281,44 +304,6 @@ export default function ClubSearchPage() {
 
   const isNextButtonDisabled = !selectedClub;
 
-  if (loading) {
-    return (
-      <Container>
-        <BackButton onClick={handleBack}>
-          <img src="/assets/Chevron_Left.svg" alt="뒤로 가기" />
-        </BackButton>
-        <CreateClubText onClick={handleCreateClub}>동아리 생성</CreateClubText>
-        <Title>동아리를 선택해 주세요</Title>
-        <SearchContainer>
-          <SearchInput
-            type="text"
-            placeholder="로딩 중..."
-            disabled
-          />
-        </SearchContainer>
-      </Container>
-    );
-  }
-
-  if (error) {
-    return (
-      <Container>
-        <BackButton onClick={handleBack}>
-          <img src="/assets/Chevron_Left.svg" alt="뒤로 가기" />
-        </BackButton>
-        <CreateClubText onClick={handleCreateClub}>동아리 생성</CreateClubText>
-        <Title>동아리를 선택해 주세요</Title>
-        <SearchContainer>
-          <SearchInput
-            type="text"
-            placeholder="데이터를 불러올 수 없습니다."
-            disabled
-          />
-        </SearchContainer>
-      </Container>
-    );
-  }
-
   return (
     <Container>
       <BackButton onClick={handleBack}>
@@ -331,17 +316,35 @@ export default function ClubSearchPage() {
       
       <SearchContainer>
         <SearchInput
+          ref={searchInputRef}
           type="text"
-          placeholder="동아리 이름 검색"
-          value={searchQuery}
+          placeholder={loading ? "검색 중..." : error ? "검색 오류" : "동아리 이름 검색"}
+          value={searchQuery || ""}
           onChange={handleSearchChange}
+          disabled={loading && !searchQuery}
         />
         <SearchIcon>
           <SearchIconSvg />
         </SearchIcon>
       </SearchContainer>
       
-      {searchResults.length > 0 && (
+      {loading && searchQuery && (
+        <SearchResultsContainer>
+          <SearchResult style={{ cursor: "default", opacity: 0.6 }}>
+            <SearchResultText>검색 중...</SearchResultText>
+          </SearchResult>
+        </SearchResultsContainer>
+      )}
+      
+      {error && searchQuery && (
+        <SearchResultsContainer>
+          <SearchResult style={{ cursor: "default", opacity: 0.6 }}>
+            <SearchResultText>검색 중 오류가 발생했습니다.</SearchResultText>
+          </SearchResult>
+        </SearchResultsContainer>
+      )}
+      
+      {!loading && !error && searchResults.length > 0 && (
         <SearchResultsContainer>
           {searchResults.map((club, index) => (
             <div key={club.id}>

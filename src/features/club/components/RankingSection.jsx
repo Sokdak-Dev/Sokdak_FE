@@ -74,8 +74,8 @@ const ProfileImage = styled.div`
   margin-top: 4px;
   
   img {
-    width: 100%;
-    height: 100%;
+    width: ${props => props.$isPlaceholder ? '70%' : '100%'};
+    height: ${props => props.$isPlaceholder ? '70%' : '100%'};
     object-fit: cover;
   }
 `;
@@ -111,7 +111,7 @@ export default function RankingSection({ rankings = [] }) {
           return (
             <RankingItem key={member.id}>
               <RankComponent>{member.rank}</RankComponent>
-              <ProfileImage>
+              <ProfileImage $isPlaceholder={!member.profileImage || member.profileImage.includes('profile.svg')}>
                 <img src={member.profileImage || '/assets/profile.svg'} alt={member.name} />
               </ProfileImage>
               <MemberName>{member.name}</MemberName>

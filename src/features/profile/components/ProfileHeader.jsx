@@ -28,14 +28,19 @@ const ProfileImageWrapper = styled.div`
   width: 87px;
   height: 87px;
   flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid #50555C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 `;
 
 const ProfileImage = styled.img`
-  width: 87px;
-  height: 87px;
+  width: ${props => props.$isPlaceholder ? '70%' : '100%'};
+  height: ${props => props.$isPlaceholder ? '70%' : '100%'};
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid #50555C;
 `;
 
 const AddButton = styled.button`
@@ -277,7 +282,11 @@ export default function ProfileHeader({ profile: profileProp }) {
 
       <ProfileSection>
         <ProfileImageWrapper>
-          <ProfileImage src={profile.profileImage || '/assets/profile.svg'} alt={profile.name} />
+          <ProfileImage 
+            src={profile.profileImage || '/assets/profile.svg'} 
+            alt={profile.name}
+            $isPlaceholder={!profile.profileImage || profile.profileImage.includes('profile.svg')}
+          />
           <AddButton onClick={handleAddClick} aria-label="프로필 이미지 추가">
             <AddButtonText>+</AddButtonText>
           </AddButton>

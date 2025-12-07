@@ -2,6 +2,7 @@
   {
     "clubId": 1,
     "name": "멋쟁이사자처럼",
+    "university": "숭실대학교",
     "description": "프로그래밍 동아리",
     "activeMemberCount": 35,
     "activeMembers": [
@@ -32,6 +33,7 @@
   {
     "clubId": 2,
     "name": "멋쟁이사자처럼",
+    "university": "연세대학교",
     "description": "프로그래밍 동아리",
     "activeMemberCount": 28,
     "activeMembers": [
@@ -54,6 +56,7 @@
   {
     "clubId": 3,
     "name": "멋쟁이사자처럼",
+    "university": "고려대학교",
     "description": "프로그래밍 동아리",
     "activeMemberCount": 22,
     "activeMembers": [
@@ -72,6 +75,7 @@
   {
     "clubId": 4,
     "name": "산들바람",
+    "university": "숭실대학교",
     "description": "음악 동아리",
     "activeMemberCount": 42,
     "activeMembers": [
@@ -98,6 +102,7 @@
   {
     "clubId": 5,
     "name": "청춘",
+    "university": "숭실대학교",
     "description": "문학 동아리",
     "activeMemberCount": 18,
     "activeMembers": [
@@ -116,6 +121,7 @@
   {
     "clubId": 6,
     "name": "별빛",
+    "university": "숭실대학교",
     "description": "천문 동아리",
     "activeMemberCount": 25,
     "activeMembers": [
@@ -138,6 +144,7 @@
   {
     "clubId": 7,
     "name": "열정",
+    "university": "숭실대학교",
     "description": "봉사 동아리",
     "activeMemberCount": 30,
     "activeMembers": [
@@ -156,6 +163,7 @@
   {
     "clubId": 8,
     "name": "창의",
+    "university": "숭실대학교",
     "description": "창업 동아리",
     "activeMemberCount": 20,
     "activeMembers": [

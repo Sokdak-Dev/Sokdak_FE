@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { useAuth } from '../../auth/useAuth.js';
+import { deleteUserProfile } from '../api/userApi.js';
+import { useNavigate } from 'react-router-dom';
 
 const Overlay = styled.div`
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -45,7 +47,7 @@ const MenuItem = styled.button`
   background: none;
   border: none;
   border-bottom: 1px solid #333333;
-  color: #ffffff;
+  color: ${props => props.$danger ? '#ff4444' : '#ffffff'};
   font-family: 'Inter', 'Noto Sans KR', sans-serif;
   font-size: 16px;
   text-align: left;
@@ -62,7 +64,6 @@ const MenuItem = styled.button`
   
   &:last-child {
     border-bottom: none;
-    color: #ff4444;
   }
 `;
 
@@ -94,6 +95,21 @@ const CloseButton = styled.button`
  */
 export default function SettingsModal({ isOpen, onClose }) {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [portalContainer, setPortalContainer] = useState(null);
+
+  // PhoneFrame 요소 찾기 (AppShell 내부)
+  useEffect(() => {
+    if (isOpen) {
+      const phoneFrame = document.querySelector('[data-phone-frame="true"]');
+      if (phoneFrame) {
+        setPortalContainer(phoneFrame);
+      } else {
+        // 폴백: body에 렌더링 (기존 동작)
+        setPortalContainer(document.body);
+      }
+    }
+  }, [isOpen]);
 
   // ESC 키로 모달 닫기
   useEffect(() => {
@@ -118,21 +134,38 @@ export default function SettingsModal({ isOpen, onClose }) {
     }
   };
 
-  // 로그아웃 처리 (logout 사용)
+  // 로그아웃 처리
   const handleLogout = () => {
     if (confirm('로그아웃하시겠습니까?')) {
-      // logout()으로 사용자 정보 초기화
       logout();
-      
-      // 로그인 페이지로 이동 (또는 홈으로)
-      // navigate('/login');
-      
       alert('로그아웃되었습니다.');
       onClose();
     }
   };
 
-  if (!isOpen || !user) {
+  // 회원탈퇴 처리
+  const handleDeleteAccount = async () => {
+    if (confirm('정말 회원탈퇴를 하시겠습니까?\n탈퇴 후에는 모든 데이터가 삭제되며 복구할 수 없습니다.')) {
+      try {
+        await deleteUserProfile();
+        alert('회원탈퇴가 완료되었습니다.');
+        logout();
+        onClose();
+        navigate('/');
+      } catch (error) {
+        console.error('회원탈퇴 실패:', error);
+        alert('회원탈퇴 중 오류가 발생했습니다. 다시 시도해주세요.');
+      }
+    }
+  };
+
+  // 비밀번호 변경 처리
+  const handleChangePassword = () => {
+    alert('비밀번호 변경 기능은 준비 중입니다.');
+    onClose();
+  };
+
+  if (!isOpen || !user || !portalContainer) {
     return null;
   }
 
@@ -146,32 +179,20 @@ export default function SettingsModal({ isOpen, onClose }) {
         <ModalTitle>설정</ModalTitle>
 
         <MenuList>
-          <MenuItem onClick={() => {
-            alert('알림 설정 기능은 준비 중입니다.');
-            onClose();
-          }}>
-            알림 설정
-          </MenuItem>
-          <MenuItem onClick={() => {
-            alert('개인정보 처리방침 기능은 준비 중입니다.');
-            onClose();
-          }}>
-            개인정보 처리방침
-          </MenuItem>
-          <MenuItem onClick={() => {
-            alert('이용약관 기능은 준비 중입니다.');
-            onClose();
-          }}>
-            이용약관
-          </MenuItem>
           <MenuItem onClick={handleLogout}>
             로그아웃
+          </MenuItem>
+          <MenuItem onClick={handleChangePassword}>
+            비밀번호 변경
+          </MenuItem>
+          <MenuItem $danger onClick={handleDeleteAccount}>
+            회원탈퇴
           </MenuItem>
         </MenuList>
       </ModalContainer>
     </Overlay>
   );
 
-  return createPortal(modalContent, document.body);
+  return createPortal(modalContent, portalContainer);
 }
 

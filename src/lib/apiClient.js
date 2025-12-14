@@ -3,6 +3,10 @@ import axios from 'axios';
 // 목 데이터 사용 여부 (환경 변수로 제어)
 export const USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === 'true';
 
+// 인증 우회 설정 (로그인 없이 테스트 가능)
+// .env 파일에 VITE_SKIP_AUTH=true 설정 시 401 에러 시 리다이렉트하지 않음
+export const SKIP_AUTH = import.meta.env.VITE_SKIP_AUTH === 'true';
+
 // 개발 환경에서는 로컬 API 서버, 프로덕션에서는 실제 API 서버
 // 목 데이터 모드일 때는 baseURL을 빈 문자열로 설정 (상대 경로 사용)
 const API_BASE_URL = USE_MOCK_DATA 
@@ -12,37 +16,32 @@ const API_BASE_URL = USE_MOCK_DATA
 /**
  * Axios 인스턴스 생성
  * 전역 설정 및 인터셉터를 추가할 수 있습니다.
+ * 세션 기반 인증을 위해 withCredentials를 true로 설정하여 쿠키를 자동으로 전송합니다.
  */
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
+  withCredentials: true, // 쿠키(JSESSIONID) 자동 전송
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
   },
 });
 
-// 요청 인터셉터: 모든 요청에 토큰 자동 추가
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
 // 응답 인터셉터: 401 에러 시 자동 로그아웃 처리
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // 토큰 만료 또는 인증 실패 시 처리
-      localStorage.removeItem('accessToken');
-      // 로그인 페이지로 리다이렉트
-      window.location.href = '/login';
+      if (error.response?.status === 401) {
+      // SKIP_AUTH가 true이면 리다이렉트하지 않음 (다른 기능 테스트 가능)
+      if (!SKIP_AUTH) {
+        // 세션 만료 또는 인증 실패 시 처리
+        // 로그인 페이지로 리다이렉트
+        window.location.href = '/login';
+      } else {
+        // 인증 우회 모드에서는 콘솔에만 경고 출력
+        console.warn('401 Unauthorized - 인증이 필요합니다. (인증 우회 모드: 리다이렉트 비활성화)');
+      }
     }
     return Promise.reject(error);
   }
@@ -57,6 +56,7 @@ export const API_ENDPOINTS = {
   MEMBERS: {
     REGISTER: '/api/members/register',
     LOGIN: '/api/members/login',
+    LOGOUT: '/api/members/logout',
     ME: '/api/members/me',
     INFO: '/api/members',
     UPDATE: '/api/members',

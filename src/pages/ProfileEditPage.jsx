@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAuth } from '../features/auth/useAuth.js';
+import { updateUserProfile } from '../features/profile/api/userApi.js';
 
 const Container = styled.div`
   width: 100%;
@@ -128,12 +129,17 @@ const ChangeImageButton = styled.button`
   cursor: pointer;
   outline: none;
   
-  &:hover {
+  &:hover:not(:disabled) {
     background: rgba(42, 183, 202, 0.1);
   }
   
-  &:active {
+  &:active:not(:disabled) {
     opacity: 0.8;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
   
   &:focus,
@@ -342,7 +348,7 @@ const ConfirmButton = styled(ModalButton)`
 
 export default function ProfileEditPage() {
   const navigate = useNavigate();
-  const { user, loading } = useAuth();
+  const { user, loading, updateUser } = useAuth();
   
   const [name, setName] = useState('');
   // const [university, setUniversity] = useState('');
@@ -350,6 +356,7 @@ export default function ProfileEditPage() {
   const [profileImage, setProfileImage] = useState('');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [selectedClub, setSelectedClub] = useState(null);
+  const [isUpdatingImage, setIsUpdatingImage] = useState(false);
 
   // 사용자 정보로 폼 초기화
   useEffect(() => {
@@ -379,15 +386,47 @@ export default function ProfileEditPage() {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
-    input.onchange = (e) => {
+    input.onchange = async (e) => {
       const file = e.target.files[0];
       if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const imageUrl = event.target.result;
-          setProfileImage(imageUrl);
-        };
-        reader.readAsDataURL(file);
+        setIsUpdatingImage(true);
+        try {
+          const reader = new FileReader();
+          
+          // 파일을 base64로 변환
+          reader.onload = async (event) => {
+            try {
+              const imageUrl = event.target.result;
+              
+              // API 호출하여 프로필 이미지 업데이트 (명세에 따라 avatarUrl 사용)
+              await updateUserProfile({ avatarUrl: imageUrl });
+              
+              // 성공 시 로컬 상태 업데이트 (프론트엔드에서는 profileImage 사용)
+              setProfileImage(imageUrl);
+              updateUser({ profileImage: imageUrl });
+              
+              // 사용자에게 알림
+              alert('프로필 이미지가 변경되었습니다!');
+            } catch (error) {
+              console.error('프로필 이미지 업데이트 실패:', error);
+              alert('프로필 이미지 변경에 실패했습니다. 다시 시도해주세요.');
+            } finally {
+              setIsUpdatingImage(false);
+            }
+          };
+          
+          reader.onerror = () => {
+            console.error('파일 읽기 실패');
+            alert('파일을 읽을 수 없습니다.');
+            setIsUpdatingImage(false);
+          };
+          
+          reader.readAsDataURL(file);
+        } catch (error) {
+          console.error('프로필 이미지 업데이트 실패:', error);
+          alert('프로필 이미지 변경에 실패했습니다. 다시 시도해주세요.');
+          setIsUpdatingImage(false);
+        }
       }
     };
     input.click();
@@ -482,8 +521,8 @@ export default function ProfileEditPage() {
             $isPlaceholder={isPlaceholderImage()}
           />
         </ProfileImageWrapper>
-        <ChangeImageButton onClick={handleImageChange}>
-          프로필 사진 변경
+        <ChangeImageButton onClick={handleImageChange} disabled={isUpdatingImage}>
+          {isUpdatingImage ? '변경 중...' : '프로필 사진 변경'}
         </ChangeImageButton>
       </ProfileImageSection>
       <FormSection>

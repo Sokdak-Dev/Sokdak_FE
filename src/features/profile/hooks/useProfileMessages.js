@@ -25,7 +25,18 @@ export default function useProfileMessages(type = 'received') {
         
         if (!cancelled) setData(result);
       } catch (err) {
-        if (!cancelled) setError(err);
+        if (!cancelled) {
+          const status = err.response?.status;
+          // 401 에러는 인증 문제이므로 빈 배열로 처리 (에러 표시하지 않음)
+          // 다른 에러만 표시
+          if (status === 401) {
+            console.warn(`[${type === 'sent' ? '보낸' : '받은'} 메시지] 인증이 필요합니다. 빈 목록을 표시합니다.`);
+            setData([]); // 빈 배열로 설정하여 에러 대신 빈 목록 표시
+            setError(null);
+          } else {
+            setError(err);
+          }
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }

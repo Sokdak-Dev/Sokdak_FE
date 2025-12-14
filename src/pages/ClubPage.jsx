@@ -101,11 +101,77 @@ const MemberItem = styled.div`
   box-sizing: border-box;
 `;
 
+const JoinClubButton = styled.button`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 333px;
+  height: 50px;
+  background: #2AB7CA;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 77px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 18px;
+  color: white;
+  text-align: center;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  
+  &:hover {
+    opacity: 0.9;
+  }
+  
+  &:active {
+    opacity: 0.8;
+    outline: none;
+  }
+  
+  &:focus {
+    outline: none;
+  }
+  
+  &:focus-visible {
+    outline: none;
+  }
+`;
+
+const EmptyStateContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+`;
+
+const EmptyStateText = styled.p`
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18px;
+  color: #cfcfcf;
+  margin: 0;
+`;
+
 export default function ClubPage() {
   const { clubId } = useParams();
   const navigate = useNavigate();
   const { user: profileData, setSelectedClubId } = useAuth();
-  const { selectedClub, userClubs, changeSelectedClub } = useSelectedClub();
+  const { selectedClub, userClubs, loading, changeSelectedClub } = useSelectedClub();
   const { data: club, loading: clubLoading, error: clubError } = useClub(clubId);
   const { data: membersData, loading: membersLoading, error: membersError } = useClubMembers(clubId);
   const containerRef = useRef(null);
@@ -151,10 +217,28 @@ export default function ClubPage() {
     navigate(`/club/${newClubId}`);
   };
 
+  const handleJoinClubClick = () => {
+    navigate("/club/search");
+  };
+
   // 멤버 데이터 추출
   const topMembers = membersData?.rankings || [];
   const members = membersData?.members || [];
   const memberCount = membersData?.memberCount || 0;
+
+  // 사용자가 가입한 동아리가 없을 때
+  if (!loading && userClubs.length === 0) {
+    return (
+      <Container ref={containerRef} $needsScroll={false}>
+        <EmptyStateContainer>
+          <EmptyStateText>가입한 동아리가 없습니다.</EmptyStateText>
+          <JoinClubButton onClick={handleJoinClubClick}>
+            동아리 가입하러 가기
+          </JoinClubButton>
+        </EmptyStateContainer>
+      </Container>
+    );
+  }
 
   if (clubLoading || membersLoading) {
     return (

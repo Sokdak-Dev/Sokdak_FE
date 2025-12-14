@@ -277,8 +277,7 @@ export default function ClubSearchPage() {
   };
 
   const handleCreateClub = () => {
-    // TODO: 동아리 생성 페이지로 이동
-    console.log("동아리 생성");
+    navigate("/club/create");
   };
 
   const handleSearchChange = (e) => {
@@ -299,7 +298,11 @@ export default function ClubSearchPage() {
 
   const handleNext = () => {
     if (selectedClub) {
-      navigate(`/club/join/${selectedClub.id}`);
+      // id 또는 clubId 필드 지원
+      const clubId = selectedClub.id ?? selectedClub.clubId;
+      if (clubId) {
+        navigate(`/club/join/${clubId}`);
+      }
     }
   };
 
@@ -347,20 +350,23 @@ export default function ClubSearchPage() {
       
       {!loading && !error && searchResults.length > 0 && (
         <SearchResultsContainer>
-          {searchResults.map((club, index) => (
-            <div key={club.id}>
-              <SearchResult onClick={() => handleResultClick(club)}>
-                <SearchResultText>
-                  {/* {club.name} {club.university} */}
-                  {club.name}
-                </SearchResultText>
-                <ArrowIcon>
-                  <ArrowUpLeftIcon />
-                </ArrowIcon>
-              </SearchResult>
-              {index < searchResults.length - 1 && <Divider />}
-            </div>
-          ))}
+          {searchResults.map((club, index) => {
+            const clubId = club.id ?? club.clubId;
+            return (
+              <div key={clubId}>
+                <SearchResult onClick={() => handleResultClick(club)}>
+                  <SearchResultText>
+                    {/* {club.name} {club.university} */}
+                    {club.name}
+                  </SearchResultText>
+                  <ArrowIcon>
+                    <ArrowUpLeftIcon />
+                  </ArrowIcon>
+                </SearchResult>
+                {index < searchResults.length - 1 && <Divider />}
+              </div>
+            );
+          })}
         </SearchResultsContainer>
       )}
       

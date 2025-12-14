@@ -81,6 +81,72 @@ const PraiseButton = styled.button`
   }
 `;
 
+const JoinClubButton = styled.button`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 333px;
+  height: 50px;
+  background: #2AB7CA;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 77px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 18px;
+  color: white;
+  text-align: center;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  
+  &:hover {
+    opacity: 0.9;
+  }
+  
+  &:active {
+    opacity: 0.8;
+    outline: none;
+  }
+  
+  &:focus {
+    outline: none;
+  }
+  
+  &:focus-visible {
+    outline: none;
+  }
+`;
+
+const EmptyStateContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+`;
+
+const EmptyStateText = styled.p`
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18px;
+  color: #cfcfcf;
+  margin: 0;
+`;
+
 export default function HomePage() {
   const navigate = useNavigate();
   const { selectedClub, userClubs, loading, changeSelectedClub } = useSelectedClub();
@@ -104,12 +170,19 @@ export default function HomePage() {
     );
   }
 
+  const handleJoinClubClick = () => {
+    navigate("/club/search");
+  };
+
   if (!selectedClub || userClubs.length === 0) {
     return (
       <Container>
-        <Header>
-          <p style={{ color: "#cfcfcf" }}>가입한 동아리가 없습니다.</p>
-        </Header>
+        <EmptyStateContainer>
+          <EmptyStateText>가입한 동아리가 없습니다.</EmptyStateText>
+          <JoinClubButton onClick={handleJoinClubClick}>
+            동아리 가입하러 가기
+          </JoinClubButton>
+        </EmptyStateContainer>
       </Container>
     );
   }

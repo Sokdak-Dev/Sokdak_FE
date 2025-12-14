@@ -318,9 +318,10 @@ export default function PraisePage() {
   // 현재 칭찬 카테고리 가져오기
   const currentCategory = praiseCategories?.[currentCategoryIndex];
   // candidates 배열을 MemberSelector가 기대하는 형태로 변환
+  // API 레벨에서 이미 userId → id 변환이 완료되었으므로, userName → name만 변환
   const candidates = currentCategory?.candidates || currentCategory?.users || [];
   const users = candidates.map(candidate => ({
-    id: candidate.userId || candidate.id,
+    id: candidate.id, // 이미 API에서 변환됨
     name: candidate.userName || candidate.name
   }));
 

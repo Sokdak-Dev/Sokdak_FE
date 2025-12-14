@@ -7,6 +7,7 @@ import SettingsModal from "./SettingsModal.jsx";
 // 로컬 assets 아이콘 경로
 const SETTING_ICON = "/assets/profile-setting.svg";
 const EDIT_ICON = "/assets/profile-edit.svg";
+const BELL_ICON = "/assets/bell.svg";
 
 const HeaderContainer = styled.div`
   position: relative;
@@ -198,6 +199,12 @@ const EditIcon = styled.img`
   object-fit: contain;
 `;
 
+const BellIcon = styled.img`
+  width: 21px;
+  height: 21px;
+  object-fit: contain;
+`;
+
 export default function ProfileHeader({ profile: profileProp }) {
   const { user: profileData, loading, error, updateUser } = useAuth();
   const profile = profileProp || profileData;
@@ -214,6 +221,11 @@ export default function ProfileHeader({ profile: profileProp }) {
   // 프로필 편집 페이지로 이동
   const handleEditClick = () => {
     navigate('/profile/edit');
+  };
+
+  // 알림 페이지로 이동
+  const handleNotificationClick = () => {
+    navigate('/notifications');
   };
 
   // 프로필 이미지 변경
@@ -276,6 +288,12 @@ export default function ProfileHeader({ profile: profileProp }) {
           <ButtonBackground />
           <IconButton onClick={handleEditClick} aria-label="편집">
             <EditIcon src={EDIT_ICON} alt="편집" />
+          </IconButton>
+        </ButtonWrapper>
+        <ButtonWrapper>
+          <ButtonBackground />
+          <IconButton onClick={handleNotificationClick} aria-label="알림">
+            <BellIcon src={BELL_ICON} alt="알림" />
           </IconButton>
         </ButtonWrapper>
       </ActionButtons>

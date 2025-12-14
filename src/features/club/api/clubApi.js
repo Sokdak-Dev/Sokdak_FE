@@ -1,6 +1,33 @@
 import { apiClient, API_ENDPOINTS, getApiUrl, USE_MOCK_DATA } from '../../../lib/apiClient.js';
 
 /**
+ * 백엔드 멤버 데이터를 프론트엔드 형식으로 변환하는 헬퍼 함수
+ * avatarUrl → profileImage, userId → id
+ * @param {object|Array} memberOrMembers - 멤버 객체 또는 멤버 배열
+ * @returns {object|Array} 변환된 멤버 객체 또는 멤버 배열
+ */
+const transformMemberData = (memberOrMembers) => {
+  if (Array.isArray(memberOrMembers)) {
+    return memberOrMembers.map(member => {
+      const { userId, avatarUrl, ...rest } = member;
+      return {
+        ...rest,
+        id: userId !== undefined ? userId : member.id,
+        profileImage: avatarUrl !== undefined ? avatarUrl : member.profileImage,
+      };
+    });
+  } else if (memberOrMembers && typeof memberOrMembers === 'object') {
+    const { userId, avatarUrl, ...rest } = memberOrMembers;
+    return {
+      ...rest,
+      id: userId !== undefined ? userId : memberOrMembers.id,
+      profileImage: avatarUrl !== undefined ? avatarUrl : memberOrMembers.profileImage,
+    };
+  }
+  return memberOrMembers;
+};
+
+/**
  * 특정 동아리 정보를 가져오는 API 함수
  * @param {string|number} clubId - 동아리 ID
  * @returns {Promise<{clubId: number, name: string, description: string, activeMemberCount: number, activeMembers: Array, createdAt: string, updatedAt: string}>} 동아리 정보 데이터
@@ -30,9 +57,10 @@ export const getClub = async (clubId) => {
 /**
  * 동아리 멤버 정보를 가져오는 API 함수
  * @param {string|number} clubId - 동아리 ID
+ * @param {boolean} active - 활성 멤버만 조회할지 여부 (기본값: true)
  * @returns {Promise} 동아리 멤버 정보 데이터
  */
-export const getClubMembers = async (clubId) => {
+export const getClubMembers = async (clubId, active = true) => {
   let endpoint;
   if (USE_MOCK_DATA) {
     // 목 데이터 경로: /data/club-members.json
@@ -56,10 +84,17 @@ export const getClubMembers = async (clubId) => {
       };
     }
   } else {
-    // 실제 API 경로: /api/clubs/{clubId}/members
-    endpoint = API_ENDPOINTS.CLUBS.MEMBERS(clubId);
+    // 실제 API 경로: /api/clubs/{clubId}/members?active={active}
+    endpoint = API_ENDPOINTS.CLUBS.MEMBERS(clubId, active);
     const response = await apiClient.get(endpoint);
-    return response.data;
+    const data = response.data;
+    
+    // 백엔드 응답을 프론트엔드 형식으로 변환
+    return {
+      ...data,
+      rankings: data.rankings ? transformMemberData(data.rankings) : [],
+      members: data.members ? transformMemberData(data.members) : [],
+    };
   }
 };
 
@@ -113,7 +148,12 @@ export const searchClubs = async (query) => {
     // 실제 API 경로: /api/clubs/search?q={query}
     endpoint = API_ENDPOINTS.CLUBS.SEARCH(query);
     const response = await apiClient.get(endpoint);
-    return response.data;
+    // 백엔드 응답이 clubId를 사용할 수 있으므로 id 필드로 변환
+    const clubs = Array.isArray(response.data) ? response.data : [];
+    return clubs.map((club) => ({
+      ...club,
+      id: club.id !== undefined ? club.id : club.clubId,
+    }));
   }
 };
 
@@ -176,7 +216,13 @@ export const getApprovedMembers = async (clubId) => {
     // 실제 API 경로: /api/clubs/{clubId}/members?active=true
     endpoint = API_ENDPOINTS.CLUBS.MEMBERS(clubId, true);
     const response = await apiClient.get(endpoint);
-    return response.data;
+    const data = response.data;
+    
+    // 백엔드 응답을 프론트엔드 형식으로 변환
+    return {
+      ...data,
+      members: data.members ? transformMemberData(data.members) : [],
+    };
   }
 };
 
@@ -208,7 +254,13 @@ export const getPendingMembers = async (clubId) => {
     // 실제 API 경로: /api/clubs/{clubId}/members?active=false
     endpoint = API_ENDPOINTS.CLUBS.MEMBERS(clubId, false);
     const response = await apiClient.get(endpoint);
-    return response.data;
+    const data = response.data;
+    
+    // 백엔드 응답을 프론트엔드 형식으로 변환
+    return {
+      ...data,
+      members: data.members ? transformMemberData(data.members) : [],
+    };
   }
 };
 

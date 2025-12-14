@@ -118,7 +118,7 @@ export default function HomePage() {
     <Container>
       <Header>
         <ClubSelector
-          university={selectedClub.university || ""}
+          // university={selectedClub.university || ""}
           clubName={selectedClub.name}
           clubs={userClubs}
           selectedClubId={selectedClub.id}

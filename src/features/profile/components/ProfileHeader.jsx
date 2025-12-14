@@ -104,15 +104,15 @@ const UserName = styled.h2`
   white-space: nowrap;
 `;
 
-const University = styled.p`
-  font-family: 'Inter', 'Noto Sans KR', sans-serif;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: normal;
-  color: #2ab7ca;
-  margin: 0;
-  white-space: nowrap;
-`;
+// const University = styled.p`
+//   font-family: 'Inter', 'Noto Sans KR', sans-serif;
+//   font-weight: 400;
+//   font-size: 12px;
+//   line-height: normal;
+//   color: #2ab7ca;
+//   margin: 0;
+//   white-space: nowrap;
+// `;
 
 const ClubsList = styled.div`
   display: flex;
@@ -121,11 +121,11 @@ const ClubsList = styled.div`
 `;
 
 const ClubItem = styled.p`
-  font-family: 'Pretendard', sans-serif;
+  font-family: 'Inter', 'Noto Sans KR', sans-serif;
   font-weight: 400;
   font-size: 14px;
   line-height: normal;
-  color: #ffffff;
+  color: #2ab7ca;
   margin: 0;
   white-space: nowrap;
 `;
@@ -294,7 +294,7 @@ export default function ProfileHeader({ profile: profileProp }) {
 
         <ProfileInfo>
           <UserName>{profile.name}</UserName>
-          <University>{profile.university}</University>
+          {/* <University>{profile.university}</University> */}
           <ClubsList>
             {profile.clubs.map((club) => (
               <ClubItem key={club.id}>{club.name}</ClubItem>

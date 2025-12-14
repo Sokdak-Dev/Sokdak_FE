@@ -345,7 +345,7 @@ export default function ProfileEditPage() {
   const { user, loading } = useAuth();
   
   const [name, setName] = useState('');
-  const [university, setUniversity] = useState('');
+  // const [university, setUniversity] = useState('');
   const [clubs, setClubs] = useState([]);
   const [profileImage, setProfileImage] = useState('');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
@@ -355,7 +355,7 @@ export default function ProfileEditPage() {
   useEffect(() => {
     if (user) {
       setName(user.name || '');
-      setUniversity(user.university || '');
+      // setUniversity(user.university || '');
       setClubs(user.clubs || []);
       setProfileImage(user.profileImage || '');
     }
@@ -425,9 +425,9 @@ export default function ProfileEditPage() {
   };
 
   // 학교 편집 페이지로 이동
-  const handleUniversityClick = () => {
-    navigate('/profile/edit/university', { state: { currentValue: university } });
-  };
+  // const handleUniversityClick = () => {
+  //   navigate('/profile/edit/university', { state: { currentValue: university } });
+  // };
 
   // 성별 편집 페이지로 이동
   const handleGenderClick = () => {
@@ -494,12 +494,12 @@ export default function ProfileEditPage() {
           </FieldValue>
         </FormRow>
 
-        <FormRow>
+        {/* <FormRow>
           <Label>학교</Label>
           <FieldValue onClick={handleUniversityClick}>
             {university || '학교를 입력하세요'}
           </FieldValue>
-        </FormRow>
+        </FormRow> */}
 
         <FormRow style={{ alignItems: 'flex-start' }}>
           <Label style={{ paddingTop: '10px' }}>동아리</Label>

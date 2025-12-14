@@ -17,14 +17,14 @@ const ClubInfo = styled.div`
   gap: 0;
 `;
 
-const UniversityName = styled.p`
-  font-family: "Inter", "Noto Sans KR", sans-serif;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 1.2;
-  color: #9f9f9f;
-  margin: 0;
-`;
+// const UniversityName = styled.p`
+//   font-family: "Inter", "Noto Sans KR", sans-serif;
+//   font-weight: 400;
+//   font-size: 18px;
+//   line-height: 1.2;
+//   color: #9f9f9f;
+//   margin: 0;
+// `;
 
 const ClubName = styled.p`
   font-family: "Inter", "Noto Sans KR", sans-serif;
@@ -66,14 +66,14 @@ const DropdownArrow = () => (
 /**
  * ClubSelector 컴포넌트
  * 동아리 선택 및 변경을 위한 드롭다운 컴포넌트
- * @param {string} university - 대학교 이름 (예: "숭실대학교")
+ * @param {string} university - 대학교 이름 (예: "숭실대학교") - 주석처리됨
  * @param {string} clubName - 동아리 이름 (예: "멋쟁이사자처럼")
  * @param {Array} clubs - 동아리 목록 [{ id, name, university }, ...]
  * @param {string|null} selectedClubId - 현재 선택된 동아리 ID
  * @param {Function} onClubChange - 동아리 변경 시 호출되는 콜백 함수 (clubId) => void
  */
 export default function ClubSelector({
-  university = "숭실대학교",
+  // university = "숭실대학교",
   clubName = "멋쟁이사자처럼",
   clubs = [],
   selectedClubId = null,
@@ -98,7 +98,7 @@ export default function ClubSelector({
     <>
       <Container onClick={handleClick}>
         <ClubInfo>
-          {university && <UniversityName>{university}</UniversityName>}
+          {/* {university && <UniversityName>{university}</UniversityName>} */}
           <ClubName>{clubName}</ClubName>
         </ClubInfo>
         <DropdownIcon>

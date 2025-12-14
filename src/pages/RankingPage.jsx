@@ -159,13 +159,13 @@ const ClubName = styled.span`
   line-height: 1.2;
 `;
 
-const UniversityName = styled.span`
-  font-family: "Inter", "Noto Sans KR", sans-serif;
-  font-weight: 400;
-  font-size: 15px;
-  color: #8c8c8c;
-  line-height: 1.2;
-`;
+// const UniversityName = styled.span`
+//   font-family: "Inter", "Noto Sans KR", sans-serif;
+//   font-weight: 400;
+//   font-size: 15px;
+//   color: #8c8c8c;
+//   line-height: 1.2;
+// `;
 
 export default function RankingPage() {
   const { data, loading, error } = useRankings();
@@ -217,9 +217,9 @@ export default function RankingPage() {
               <ClubRankNumber $rank={club.rank}>{club.rank}</ClubRankNumber>
               <ClubInfo>
                 <ClubName>{club.clubName}</ClubName>
-                {club.university && (
+                {/* {club.university && (
                   <UniversityName>{club.university}</UniversityName>
-                )}
+                )} */}
               </ClubInfo>
             </ClubRankingItem>
           ))}

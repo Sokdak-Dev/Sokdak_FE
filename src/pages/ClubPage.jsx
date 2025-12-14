@@ -197,7 +197,7 @@ export default function ClubPage() {
       <div ref={contentRef}>
         <Header>
           <ClubSelector
-            university={selectedClub?.university || club.university || ""}
+            // university={selectedClub?.university || club.university || ""}
             clubName={club.name}
             clubs={userClubs}
             selectedClubId={clubId}

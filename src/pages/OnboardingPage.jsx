@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import useOnboarding from '../features/onboarding/hooks/useOnboarding.js';
 import NameAndGenderStep from '../features/onboarding/components/NameAndGenderStep.jsx';
-import UniversityStep from '../features/onboarding/components/UniversityStep.jsx';
+// import UniversityStep from '../features/onboarding/components/UniversityStep.jsx';
 import ClubStep from '../features/onboarding/components/ClubStep.jsx';
 import PersonalityStep from '../features/onboarding/components/PersonalityStep.jsx';
 
@@ -37,17 +37,17 @@ export default function OnboardingPage() {
             onNext={handleNext}
           />
         );
+      // case 2:
+      //   return (
+      //     <UniversityStep
+      //       currentStep={currentStep}
+      //       data={onboardingData}
+      //       onUpdate={updateStepData}
+      //       onNext={handleNext}
+      //       onBack={handleBack}
+      //     />
+      //   );
       case 2:
-        return (
-          <UniversityStep
-            currentStep={currentStep}
-            data={onboardingData}
-            onUpdate={updateStepData}
-            onNext={handleNext}
-            onBack={handleBack}
-          />
-        );
-      case 3:
         return (
           <ClubStep
             currentStep={currentStep}
@@ -57,7 +57,17 @@ export default function OnboardingPage() {
             onBack={handleBack}
           />
         );
-      case 4:
+      // case 3:
+      //   return (
+      //     <ClubStep
+      //       currentStep={currentStep}
+      //       data={onboardingData}
+      //       onUpdate={updateStepData}
+      //       onNext={handleNext}
+      //       onBack={handleBack}
+      //     />
+      //   );
+      case 3:
         return (
           <PersonalityStep
             currentStep={currentStep}

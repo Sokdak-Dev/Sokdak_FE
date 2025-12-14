@@ -174,9 +174,9 @@ const NextButton = styled.button`
   width: 333px;
   max-width: calc(100% - 60px);
   height: 50px;
-  background: ${props => props.$disabled ? '#b9d0d3' : '#2ab7ca'};
+  background: ${props => props.$disabled ? '#B9D0D3' : '#2ab7ca'};
   border: none;
-  border-radius: 25px;
+  border-radius: 10px;
   font-family: 'Pretendard', sans-serif;
   font-weight: 600;
   font-size: 16px;
@@ -185,6 +185,7 @@ const NextButton = styled.button`
   cursor: ${props => props.$disabled ? 'not-allowed' : 'pointer'};
   outline: none;
   flex-shrink: 0;
+  padding: 11px 77px;
   
   &:active {
     opacity: ${props => props.$disabled ? 1 : 0.8};

@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAuth } from '../features/auth/useAuth.js';
 import NameFieldEditor from '../features/profile/components/NameFieldEditor.jsx';
-import UniversityFieldEditor from '../features/profile/components/UniversityFieldEditor.jsx';
+// import UniversityFieldEditor from '../features/profile/components/UniversityFieldEditor.jsx';
 import GenderFieldEditor from '../features/profile/components/GenderFieldEditor.jsx';
 
 const Container = styled.div`
@@ -112,11 +112,11 @@ const getFieldConfig = (fieldType) => {
         title: '이름',
         fieldKey: 'name',
       };
-    case 'university':
-      return {
-        title: '학교',
-        fieldKey: 'university',
-      };
+    // case 'university':
+    //   return {
+    //     title: '학교',
+    //     fieldKey: 'university',
+    //   };
     case 'gender':
       return {
         title: '성별',
@@ -162,10 +162,10 @@ export default function ProfileFieldEditPage() {
       return;
     }
 
-    if (fieldType === 'university' && !value.trim()) {
-      alert('학교를 선택해주세요.');
-      return;
-    }
+    // if (fieldType === 'university' && !value.trim()) {
+    //   alert('학교를 선택해주세요.');
+    //   return;
+    // }
 
     if (fieldType === 'gender' && !value) {
       alert('성별을 선택해주세요.');
@@ -187,8 +187,8 @@ export default function ProfileFieldEditPage() {
     switch (fieldType) {
       case 'name':
         return <NameFieldEditor value={value} onChange={setValue} />;
-      case 'university':
-        return <UniversityFieldEditor value={value} onChange={setValue} />;
+      // case 'university':
+      //   return <UniversityFieldEditor value={value} onChange={setValue} />;
       case 'gender':
         return <GenderFieldEditor value={value} onChange={setValue} />;
       default:

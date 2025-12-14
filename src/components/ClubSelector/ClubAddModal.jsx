@@ -235,14 +235,14 @@ export default function ClubAddModal({
                   onClick={() => handleClubSelect(club.id)}
                 >
                   <ClubItemContent>
-                    {club.university ? (
+                    {/* {club.university ? (
                       <ClubNameWithUniversity>
                         <ClubText>{club.name} </ClubText>
                         <ClubText>{club.university}</ClubText>
                       </ClubNameWithUniversity>
-                    ) : (
+                    ) : ( */}
                       <ClubText>{club.name}</ClubText>
-                    )}
+                    {/* )} */}
                   </ClubItemContent>
                   {isSelected && (
                     <CheckIcon>

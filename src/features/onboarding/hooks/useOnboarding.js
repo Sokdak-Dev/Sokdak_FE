@@ -17,7 +17,7 @@ export default function useOnboarding() {
   const [onboardingData, setOnboardingData] = useState({
     name: '',
     gender: '',
-    university: '',
+    // university: '',
     club: null,
     personality: '',
   });
@@ -59,7 +59,7 @@ export default function useOnboarding() {
       const updateData = {
         name: onboardingData.name,
         gender: onboardingData.gender,
-        university: onboardingData.university,
+        // university: onboardingData.university,
       };
 
       // 성격이 있으면 추가

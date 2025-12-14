@@ -3,7 +3,7 @@ import { apiClient, API_ENDPOINTS, getApiUrl, USE_MOCK_DATA } from '../../../lib
 /**
  * 특정 동아리 정보를 가져오는 API 함수
  * @param {string|number} clubId - 동아리 ID
- * @returns {Promise<{clubId: number, name: string, university: string, description: string, activeMemberCount: number, activeMembers: Array, createdAt: string, updatedAt: string}>} 동아리 정보 데이터
+ * @returns {Promise<{clubId: number, name: string, description: string, activeMemberCount: number, activeMembers: Array, createdAt: string, updatedAt: string}>} 동아리 정보 데이터
  */
 export const getClub = async (clubId) => {
   let endpoint;
@@ -94,7 +94,7 @@ export const deleteClub = async (clubId) => {
 /**
  * 동아리 검색
  * @param {string} query - 검색어
- * @returns {Promise<Array<{id: number, name: string, university: string, description: string}>>} 검색 결과
+ * @returns {Promise<Array<{id: number, name: string, description: string}>>} 검색 결과
  */
 export const searchClubs = async (query) => {
   let endpoint;
@@ -105,8 +105,8 @@ export const searchClubs = async (query) => {
     const clubs = response.data;
     const filtered = clubs.filter((club) => 
       club.name?.toLowerCase().includes(query.toLowerCase()) ||
-      club.description?.toLowerCase().includes(query.toLowerCase()) ||
-      club.university?.toLowerCase().includes(query.toLowerCase())
+      club.description?.toLowerCase().includes(query.toLowerCase())
+      // || club.university?.toLowerCase().includes(query.toLowerCase())
     );
     return filtered;
   } else {

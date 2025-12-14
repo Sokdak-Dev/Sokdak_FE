@@ -24,28 +24,24 @@
       "rank": 1,
       "clubId": 1,
       "clubName": "멋쟁이사자처럼",
-      "university": "숭실대학교",
       "totalCompliments": 450
     },
     {
       "rank": 2,
       "clubId": 2,
       "clubName": "멋쟁이사자처럼",
-      "university": "연세대학교",
       "totalCompliments": 380
     },
     {
       "rank": 3,
       "clubId": 3,
       "clubName": "산들바람",
-      "university": "숭실대학교",
       "totalCompliments": 320
     },
     {
       "rank": 4,
       "clubId": 4,
       "clubName": "청춘",
-      "university": "숭실대학교",
       "totalCompliments": 280
     }
   ]

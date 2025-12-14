@@ -15,7 +15,7 @@ export function useSelectedClub() {
     return profileData.clubs.map((userClub) => ({
       id: userClub.id.toString(),
       name: userClub.name,
-      university: profileData.university || '',
+      // university: profileData.university || '',
     }));
   }, [profileData]);
 

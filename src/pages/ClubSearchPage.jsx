@@ -293,7 +293,8 @@ export default function ClubSearchPage() {
 
   const handleResultClick = (club) => {
     setSelectedClub(club);
-    setSearchQuery(`${club.name} ${club.university}`);
+    // setSearchQuery(`${club.name} ${club.university}`);
+    setSearchQuery(club.name);
   };
 
   const handleNext = () => {
@@ -350,7 +351,8 @@ export default function ClubSearchPage() {
             <div key={club.id}>
               <SearchResult onClick={() => handleResultClick(club)}>
                 <SearchResultText>
-                  {club.name} {club.university}
+                  {/* {club.name} {club.university} */}
+                  {club.name}
                 </SearchResultText>
                 <ArrowIcon>
                   <ArrowUpLeftIcon />

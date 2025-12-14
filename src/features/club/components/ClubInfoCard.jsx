@@ -99,12 +99,12 @@ export default function ClubInfoCard({ club }) {
       <Subtitle>동아리원을 칭찬해주세요</Subtitle>
       
       <InfoContainer>
-        <InfoRow>
+        {/* <InfoRow>
           <IconWrapper>
             <img src="/assets/club-join-uni.svg" alt="학교" />
           </IconWrapper>
           <InfoText>{club.university || '학교 정보 없음'}</InfoText>
-        </InfoRow>
+        </InfoRow> */}
         
         <InfoRow>
           <IconWrapper>

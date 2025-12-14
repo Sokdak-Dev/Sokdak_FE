@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import useOnboarding from '../features/onboarding/hooks/useOnboarding.js';
+import EmailPasswordStep from '../features/onboarding/components/EmailPasswordStep.jsx';
 import NameAndGenderStep from '../features/onboarding/components/NameAndGenderStep.jsx';
-// import UniversityStep from '../features/onboarding/components/UniversityStep.jsx';
-import ClubStep from '../features/onboarding/components/ClubStep.jsx';
 import PersonalityStep from '../features/onboarding/components/PersonalityStep.jsx';
 
 const Container = styled.div`
@@ -18,10 +17,12 @@ const Container = styled.div`
 export default function OnboardingPage() {
   const {
     currentStep,
+    totalSteps,
     onboardingData,
     updateStepData,
     handleNext,
     handleBack,
+    handleComplete,
     loading,
   } = useOnboarding();
 
@@ -30,51 +31,38 @@ export default function OnboardingPage() {
     switch (currentStep) {
       case 1:
         return (
-          <NameAndGenderStep
+          <EmailPasswordStep
             currentStep={currentStep}
+            totalSteps={totalSteps}
             data={onboardingData}
             onUpdate={updateStepData}
             onNext={handleNext}
           />
         );
-      // case 2:
-      //   return (
-      //     <UniversityStep
-      //       currentStep={currentStep}
-      //       data={onboardingData}
-      //       onUpdate={updateStepData}
-      //       onNext={handleNext}
-      //       onBack={handleBack}
-      //     />
-      //   );
       case 2:
         return (
-          <ClubStep
+          <NameAndGenderStep
             currentStep={currentStep}
+            totalSteps={totalSteps}
             data={onboardingData}
             onUpdate={updateStepData}
             onNext={handleNext}
-            onBack={handleBack}
           />
         );
-      // case 3:
-      //   return (
-      //     <ClubStep
-      //       currentStep={currentStep}
-      //       data={onboardingData}
-      //       onUpdate={updateStepData}
-      //       onNext={handleNext}
-      //       onBack={handleBack}
-      //     />
-      //   );
       case 3:
+      case 4:
+      case 5:
+      case 6:
+      case 7:
         return (
           <PersonalityStep
             currentStep={currentStep}
+            totalSteps={totalSteps}
             data={onboardingData}
             onUpdate={updateStepData}
             onNext={handleNext}
             onBack={handleBack}
+            onComplete={handleComplete}
           />
         );
       default:

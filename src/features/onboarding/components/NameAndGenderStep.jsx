@@ -192,7 +192,7 @@ const NextButton = styled.button`
   }
 `;
 
-export default function NameAndGenderStep({ currentStep = 1, data, onUpdate, onNext }) {
+export default function NameAndGenderStep({ currentStep = 1, totalSteps = 6, data, onUpdate, onNext }) {
   const [name, setName] = useState(data.name || '');
   const [gender, setGender] = useState(data.gender || '');
   const [isGenderDropdownOpen, setIsGenderDropdownOpen] = useState(false);
@@ -238,7 +238,7 @@ export default function NameAndGenderStep({ currentStep = 1, data, onUpdate, onN
   return (
     <Container>
       <ProgressBarWrapper>
-        <ProgressBar currentStep={currentStep} totalSteps={4} />
+        <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       </ProgressBarWrapper>
 
       <Title>이름과 성별을 입력해주세요</Title>

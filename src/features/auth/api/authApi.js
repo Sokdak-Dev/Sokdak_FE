@@ -11,6 +11,16 @@ export const login = async (credentials) => {
 };
 
 /**
+ * 회원가입 API
+ * @param {object} registerData - 회원가입 정보 { email, password, name, nickname, avatarUrl, selections }
+ * @returns {Promise} 회원가입 성공 시 응답 데이터
+ */
+export const register = async (registerData) => {
+  const response = await apiClient.post(API_ENDPOINTS.MEMBERS.REGISTER, registerData);
+  return response.data;
+};
+
+/**
  * 로그아웃 API
  * @returns {Promise} 로그아웃 응답 데이터
  */

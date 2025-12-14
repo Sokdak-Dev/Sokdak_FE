@@ -88,13 +88,14 @@ const BackIcon = () => (
 const Title = styled.h1`
   font-family: 'Pretendard', sans-serif;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 18px;
   line-height: 26px;
   color: #cfcfcf;
   margin: 0;
   padding: 0 30px;
   margin-top: 75px;
   flex-shrink: 0;
+  text-align: center;
 `;
 
 // 성격 옵션 컨테이너
@@ -111,37 +112,17 @@ const OptionItem = styled.button`
   width: 100%;
   max-width: 333px;
   margin: 0 auto;
-  padding: 16px 20px;
-  background: ${props => props.$selected ? '#2ab7ca' : '#585858'};
-  border: none;
-  border-radius: 25px;
+  padding: 18px 77px;
+  background: ${props => props.$selected ? '#2ab7ca' : '#353535'};
+  border: 1px solid #2ab7ca;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.5);
   font-family: 'Pretendard', sans-serif;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 16px;
   line-height: 18px;
   color: #ffffff;
-  text-align: left;
-  cursor: pointer;
-  outline: none;
-  
-  &:active {
-    opacity: 0.8;
-  }
-`;
-
-// 건너뛰기 버튼
-const SkipButton = styled.button`
-  position: absolute;
-  bottom: 110px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: none;
-  border: none;
-  font-family: 'Pretendard', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 18px;
-  color: #9f9f9f;
+  text-align: center;
   cursor: pointer;
   outline: none;
   
@@ -159,56 +140,108 @@ const CompleteButton = styled.button`
   width: 333px;
   max-width: calc(100% - 60px);
   height: 50px;
+  padding: 11px 77px;
   background: ${props => props.$disabled ? '#b9d0d3' : '#2ab7ca'};
   border: none;
-  border-radius: 25px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.5);
   font-family: 'Pretendard', sans-serif;
   font-weight: 600;
   font-size: 16px;
   line-height: 18px;
   color: #ffffff;
+  text-align: center;
   cursor: ${props => props.$disabled ? 'not-allowed' : 'pointer'};
   outline: none;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   
   &:active {
     opacity: ${props => props.$disabled ? 1 : 0.8};
   }
 `;
 
-// 성격 옵션 목록 (예시)
-const PERSONALITY_OPTIONS = [
-  '활발한',
-  '조용한',
-  '친근한',
-  '진지한',
-  '유머러스한',
-  '책임감 있는',
-  '창의적인',
-  '논리적인',
-];
+// 카테고리별 옵션 목록
+const CATEGORY_OPTIONS = {
+  LEADERSHIP: ['비전형 리더', '섬세한 조율자', '카리스마형', '솔선수범형', '믿음직한 후원자'],
+  CREATIVITY: ['아이디어 폭포', '실험정신 충만', '문제 해결사', '트렌드 세터', '관점 전환가'],
+  TEAMWORK: ['분위기 메이커', '갈등 조정자', '든든한 서포터', '의사소통 챔피언', '배려왕'],
+  PROFESSIONALISM: ['디테일 장인', '마감의 신', '데이터 기반형', '표준 수호자', '품질 집착러'],
+  GROWTH: ['성장 모험가', '피드백 러버', '학습 전도사', '도전 설계자', '꾸준함의 아이콘'],
+};
 
-export default function PersonalityStep({ currentStep = 4, data, onUpdate, onNext, onBack }) {
-  const [selectedPersonality, setSelectedPersonality] = useState(data.personality || '');
+// 카테고리 코드 배열 (단계 순서)
+const CATEGORY_ORDER = ['LEADERSHIP', 'CREATIVITY', 'TEAMWORK', 'PROFESSIONALISM', 'GROWTH'];
 
-  const handleSelectPersonality = (personality) => {
-    setSelectedPersonality(personality);
-    onUpdate({ personality });
+// 카테고리 한글 이름
+const CATEGORY_NAMES = {
+  LEADERSHIP: '리더십',
+  CREATIVITY: '창의성',
+  TEAMWORK: '팀워크',
+  PROFESSIONALISM: '전문성',
+  GROWTH: '성장',
+};
+
+// 카테고리별 질문 문구
+const CATEGORY_QUESTIONS = {
+  LEADERSHIP: '나는 어떤 리더십 스타일에 가까울까?',
+  CREATIVITY: '나는 어떤 방식으로 창의성을 발휘할까?',
+  TEAMWORK: '나는 팀에서 어떤 역할을 가장 잘 할까?',
+  PROFESSIONALISM: '나는 어떤 업무 스타일을 가진 사람일까?',
+  GROWTH: '나는 어떤 방식으로 성장하는 사람일까?',
+};
+
+export default function PersonalityStep({ currentStep = 3, totalSteps = 7, data, onUpdate, onNext, onBack, onComplete }) {
+  // currentStep이 3~7이므로, 카테고리 인덱스는 currentStep - 3
+  const categoryIndex = currentStep - 3;
+  const categoryCode = CATEGORY_ORDER[categoryIndex];
+  const categoryOptions = CATEGORY_OPTIONS[categoryCode] || [];
+  const isLastStep = currentStep === totalSteps;
+
+  // 현재 카테고리에 대한 선택된 옵션 찾기
+  const currentSelection = data.selections?.find(s => s.categoryCode === categoryCode);
+  const [selectedOption, setSelectedOption] = useState(currentSelection?.optionLabel || '');
+
+  const handleSelectOption = (optionLabel) => {
+    setSelectedOption(optionLabel);
+    
+    // selections 배열 업데이트
+    const existingSelections = data.selections || [];
+    const rank = categoryIndex + 1; // 1부터 시작하는 순위
+    
+    // 기존 선택 제거하고 새로 추가
+    const updatedSelections = existingSelections.filter(s => s.categoryCode !== categoryCode);
+    updatedSelections.push({
+      categoryCode,
+      optionLabel,
+      rank,
+    });
+    
+    // rank 순서대로 정렬
+    updatedSelections.sort((a, b) => a.rank - b.rank);
+    
+    onUpdate({ selections: updatedSelections });
   };
 
-  const handleComplete = () => {
-    onNext(); // 마지막 단계이므로 완료 처리
-  };
-
-  const handleSkip = () => {
-    onUpdate({ personality: '' });
-    onNext();
+  const handleNext = () => {
+    if (isLastStep) {
+      // 마지막 단계에서는 완료 처리
+      if (onComplete) {
+        onComplete();
+      } else {
+        onNext();
+      }
+    } else {
+      onNext();
+    }
   };
 
   return (
     <Container>
       <ProgressBarWrapper>
-        <ProgressBar currentStep={currentStep} totalSteps={4} />
+        <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       </ProgressBarWrapper>
       
       <BackButtonWrapper>
@@ -217,24 +250,26 @@ export default function PersonalityStep({ currentStep = 4, data, onUpdate, onNex
         </BackButton>
       </BackButtonWrapper>
 
-      <Title>성격을 선택해주세요</Title>
+      <Title>{CATEGORY_QUESTIONS[categoryCode]}</Title>
 
       <OptionsContainer>
-        {PERSONALITY_OPTIONS.map((personality) => (
+        {categoryOptions.map((option) => (
           <OptionItem
-            key={personality}
-            $selected={selectedPersonality === personality}
-            onClick={() => handleSelectPersonality(personality)}
+            key={option}
+            $selected={selectedOption === option}
+            onClick={() => handleSelectOption(option)}
           >
-            {personality}
+            {option}
           </OptionItem>
         ))}
       </OptionsContainer>
 
-      <SkipButton onClick={handleSkip}>건너뛰기</SkipButton>
-
-      <CompleteButton onClick={handleComplete}>
-        완료하기
+      <CompleteButton 
+        onClick={handleNext}
+        $disabled={!selectedOption}
+        disabled={!selectedOption}
+      >
+        {isLastStep ? '시작하기' : '다음으로'}
       </CompleteButton>
     </Container>
   );

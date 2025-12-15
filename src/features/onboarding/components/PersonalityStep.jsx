@@ -14,9 +14,13 @@ const Container = styled.div`
 
 // 진행 바 wrapper
 const ProgressBarWrapper = styled.div`
-  padding: 101px 30px 0 30px;
+  padding: clamp(40px, 10vh, 101px) 30px 0 30px;
   flex-shrink: 0;
   width: 100%;
+  
+  @media (max-height: 700px) {
+    padding: 30px 30px 0 30px;
+  }
 `;
 
 // 뒤로가기 버튼 wrapper
@@ -25,8 +29,12 @@ const BackButtonWrapper = styled.div`
   justify-content: flex-start;
   width: 100%;
   padding-left: 27px;
-  margin-top: 20px;
+  margin-top: clamp(10px, 2vh, 20px);
   flex-shrink: 0;
+  
+  @media (max-height: 700px) {
+    margin-top: 10px;
+  }
 `;
 
 // 뒤로가기 버튼
@@ -93,19 +101,27 @@ const Title = styled.h1`
   color: #cfcfcf;
   margin: 0;
   padding: 0 30px;
-  margin-top: 75px;
+  margin-top: clamp(20px, 8vh, 75px);
   flex-shrink: 0;
   text-align: center;
+  
+  @media (max-height: 700px) {
+    margin-top: 20px;
+  }
 `;
 
 // 성격 옵션 컨테이너
 const OptionsContainer = styled.div`
   flex: 1;
   overflow-y: auto;
-  padding: 28px 30px;
+  padding: clamp(15px, 3vh, 28px) 30px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  
+  @media (max-height: 700px) {
+    padding: 15px 30px;
+  }
 `;
 
 const OptionItem = styled.button`
@@ -134,7 +150,7 @@ const OptionItem = styled.button`
 // 완료 버튼
 const CompleteButton = styled.button`
   position: absolute;
-  bottom: 50px;
+  bottom: clamp(20px, 5vh, 50px);
   left: 50%;
   transform: translateX(-50%);
   width: 333px;
@@ -157,6 +173,10 @@ const CompleteButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  @media (max-height: 700px) {
+    bottom: 20px;
+  }
   
   &:active {
     opacity: ${props => props.$disabled ? 1 : 0.8};

@@ -164,6 +164,9 @@ export default function BottomNav() {
     const clubId = selectedClub?.id || (userClubs.length > 0 ? userClubs[0].id : null);
     if (clubId) {
       navigate(`/club/${clubId}`);
+    } else {
+      // 동아리가 없으면 빈 상태 페이지로 이동
+      navigate(`/club`);
     }
   };
 

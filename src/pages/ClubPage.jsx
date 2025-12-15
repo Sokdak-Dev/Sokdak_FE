@@ -172,7 +172,7 @@ export default function ClubPage() {
   const { clubId } = useParams();
   const navigate = useNavigate();
   const { user: profileData, setSelectedClubId } = useAuth();
-  const { selectedClub, userClubs, loading, changeSelectedClub } = useSelectedClub();
+  const { userClubs, loading, changeSelectedClub } = useSelectedClub();
   const { data: club, loading: clubLoading, error: clubError } = useClub(clubId);
   const { data: membersData, loading: membersLoading, error: membersError } = useClubMembers(clubId);
   const { data: rankingsData, loading: rankingsLoading, error: rankingsError } = useClubRankings(clubId, 3);
@@ -209,11 +209,6 @@ export default function ClubPage() {
     };
   }, [club, membersData, rankingsData, clubLoading, membersLoading, rankingsLoading]);
 
-  // clubId는 항상 있어야 함 (라우팅에서 보장)
-  if (!clubId) {
-    return null; // loader에서 리다이렉트되므로 여기 도달하지 않음
-  }
-
   const handleClubChange = (newClubId) => {
     changeSelectedClub(newClubId);
     navigate(`/club/${newClubId}`);
@@ -223,13 +218,8 @@ export default function ClubPage() {
     navigate("/club/search");
   };
 
-  // 멤버 데이터 추출
-  const topMembers = rankingsData || [];
-  const members = membersData?.members || [];
-  const memberCount = membersData?.memberCount || club?.activeMemberCount || 0;
-
-  // 사용자가 가입한 동아리가 없을 때
-  if (!loading && userClubs.length === 0) {
+  // clubId가 없거나 사용자가 가입한 동아리가 없을 때
+  if (!clubId || (!loading && userClubs.length === 0)) {
     return (
       <Container ref={containerRef} $needsScroll={false}>
         <EmptyStateContainer>
@@ -241,6 +231,11 @@ export default function ClubPage() {
       </Container>
     );
   }
+
+  // 멤버 데이터 추출
+  const topMembers = rankingsData || [];
+  const members = membersData?.members || [];
+  const memberCount = membersData?.memberCount || club?.activeMemberCount || 0;
 
   if (clubLoading || membersLoading || rankingsLoading) {
     return (

@@ -39,10 +39,6 @@ const router = createBrowserRouter([
         element: <RankingPage />,
       },
       {
-        path: "club/:clubId",
-        element: <ClubPage />,
-      },
-      {
         path: "club/search",
         element: <ClubSearchPage />,
       },
@@ -53,6 +49,14 @@ const router = createBrowserRouter([
       {
         path: "club/create",
         element: <ClubCreatePage />,
+      },
+      {
+        path: "club/:clubId",
+        element: <ClubPage />,
+      },
+      {
+        path: "club",
+        element: <ClubPage />,
       },
       {
         path: "mypage",

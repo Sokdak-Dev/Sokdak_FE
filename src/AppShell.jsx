@@ -52,6 +52,7 @@ const ContentWrapper = styled.div`
 export default function AppShell({ children }) {
   const location = useLocation();
   const showBottomNav = 
+    location.pathname !== "/" &&
     location.pathname !== "/praise" && 
     location.pathname !== "/club/search" &&
     location.pathname !== "/club/create" &&

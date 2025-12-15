@@ -17,11 +17,12 @@ const Container = styled.div`
 const LogoContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 300px;
+  height: 250px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 100px;
+  margin-top: 60px;
+  flex-shrink: 0;
 `;
 
 const LogoImage1 = styled.img`
@@ -40,10 +41,18 @@ const LogoImage2 = styled.img`
   top: 0;
 `;
 
+// 폼 컨테이너
+const FormContainer = styled.form`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 20px;
+`;
+
 // 입력 필드 컨테이너
 const InputContainer = styled.div`
   padding: 0 30px;
-  margin-top: 50px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -53,7 +62,7 @@ const InputContainer = styled.div`
 const Input = styled.input`
   width: 100%;
   max-width: 333px;
-  height: 60px;
+  height: 48px;
   background: #585858;
   border: none;
   border-radius: 25px;
@@ -62,7 +71,7 @@ const Input = styled.input`
   font-size: 16px;
   line-height: 18px;
   color: #ffffff;
-  padding: 16px 20px;
+  padding: 12px 20px;
   outline: none;
   margin: 0 auto;
   display: block;
@@ -76,12 +85,17 @@ const Input = styled.input`
   }
 `;
 
+// 로그인 버튼 컨테이너
+const LoginButtonContainer = styled.div`
+  padding: 0 30px;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  flex-shrink: 0;
+`;
+
 // 로그인 버튼
 const LoginButton = styled.button`
-  position: absolute;
-  bottom: 120px;
-  left: 50%;
-  transform: translateX(-50%);
   width: 305px;
   max-width: calc(100% - 60px);
   height: 50px;
@@ -108,16 +122,18 @@ const LoginButton = styled.button`
 
 // 회원가입 링크 영역
 const SignupLinkContainer = styled.div`
-  position: absolute;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%);
+  padding: 0 30px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
+  margin-top: auto;
+  margin-bottom: 50px;
+  flex-shrink: 0;
   font-family: 'Pretendard', sans-serif;
   font-size: 14px;
   line-height: 16px;
+  z-index: 1;
 `;
 
 const SignupLinkText = styled.p`
@@ -205,7 +221,7 @@ export default function LoginPage() {
         <LogoImage1 src={logoImage1} alt="Logo" />
       </LogoContainer>
 
-      <form onSubmit={handleLogin}>
+      <FormContainer onSubmit={handleLogin}>
         <InputContainer>
           <Input
             type="email"
@@ -225,14 +241,16 @@ export default function LoginPage() {
           {error && <ErrorMessage>{error}</ErrorMessage>}
         </InputContainer>
 
-        <LoginButton
-          type="submit"
-          $disabled={isDisabled}
-          disabled={isDisabled}
-        >
-          {loading ? '로그인 중...' : '로그인'}
-        </LoginButton>
-      </form>
+        <LoginButtonContainer>
+          <LoginButton
+            type="submit"
+            $disabled={isDisabled}
+            disabled={isDisabled}
+          >
+            {loading ? '로그인 중...' : '로그인'}
+          </LoginButton>
+        </LoginButtonContainer>
+      </FormContainer>
 
       <SignupLinkContainer>
         <SignupLinkText>계정이 없나요?</SignupLinkText>

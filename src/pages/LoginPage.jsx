@@ -26,11 +26,8 @@ const LogoContainer = styled.div`
 `;
 
 const LogoImage1 = styled.img`
-  position: absolute;
-  width: 110px;
-  height: 110px;
-  left: calc(50% - 55px);
-  top: 100px;
+  width: 182px;
+  height: 211px;
 `;
 
 const LogoImage2 = styled.img`
@@ -210,14 +207,11 @@ export default function LoginPage() {
 
   const isDisabled = !email.trim() || !password.trim() || loading;
 
-  // 로고 이미지 URL (Figma에서 가져온 이미지)
-  const logoImage1 = "http://localhost:3845/assets/e14a9917fbb7fbc38d3c984d07dc2deadb150242.svg";
-  const logoImage2 = "http://localhost:3845/assets/706862905e25ad0e538c8b804ed0fb69524fb041.svg";
+  const logoImage1 = "/assets/Group 6.svg";
 
   return (
     <Container>
       <LogoContainer>
-        <LogoImage2 src={logoImage2} alt="Logo" />
         <LogoImage1 src={logoImage1} alt="Logo" />
       </LogoContainer>
 

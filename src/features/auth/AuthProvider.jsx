@@ -251,6 +251,36 @@ export function AuthProvider({ children }) {
     });
   };
 
+  /**
+   * 사용자 프로필을 다시 불러오는 함수
+   * 동아리 생성/가입 등으로 사용자 정보가 변경되었을 때 호출
+   */
+  const reloadUser = useCallback(async () => {
+    try {
+      const userData = await getUserProfile();
+      
+      // selectedClubId가 없으면 첫 번째 동아리로 설정
+      if (!userData.selectedClubId && userData.clubs && userData.clubs.length > 0) {
+        userData.selectedClubId = userData.clubs[0].id.toString();
+      }
+      
+      // 성별을 프론트엔드 표시 형식으로 변환 (male -> 남성, female -> 여성)
+      const genderDisplayMapping = {
+        'male': '남성',
+        'female': '여성',
+      };
+      if (userData.gender && genderDisplayMapping[userData.gender]) {
+        userData.gender = genderDisplayMapping[userData.gender];
+      }
+      
+      setUser(userData);
+      return userData;
+    } catch (err) {
+      console.error('사용자 프로필 재로드 실패:', err);
+      throw err;
+    }
+  }, []);
+
   // Context에 제공할 값
   const value = useMemo(
     () => ({
@@ -261,8 +291,9 @@ export function AuthProvider({ children }) {
       logout,
       updateUser,
       setSelectedClubId,
+      reloadUser,
     }),
-    [user, loading, error, updateUser]
+    [user, loading, error, updateUser, reloadUser]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

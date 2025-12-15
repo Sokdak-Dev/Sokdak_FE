@@ -28,6 +28,10 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        element: <LoginPage />,
+      },
+      {
+        path: "home",
         element: <HomePage />,
       },
       {

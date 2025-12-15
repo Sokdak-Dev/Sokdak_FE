@@ -338,7 +338,7 @@ export default function PraisePage() {
 
   const handleBack = () => {
     // BackButton 클릭 시 홈 화면으로 이동
-    navigate("/");
+    navigate("/home");
   };
 
   const handleNext = () => {
@@ -347,7 +347,7 @@ export default function PraisePage() {
       setCurrentCategoryIndex(currentCategoryIndex + 1);
     } else {
       // 모든 칭찬을 완료했을 때 홈 화면으로 이동
-      navigate("/");
+      navigate("/home");
     }
   };
 

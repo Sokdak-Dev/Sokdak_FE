@@ -168,15 +168,15 @@ export default function BottomNav() {
   };
 
   const navItems = [
-    { path: "/", label: "홈", icon: HomeIcon, onClick: () => navigate("/") },
+    { path: "/home", label: "홈", icon: HomeIcon, onClick: () => navigate("/home") },
     { path: "/ranking", label: "랭킹", icon: RankingIcon, onClick: () => navigate("/ranking") },
     { path: "/club", label: "동아리", icon: ClubIcon, onClick: handleClubClick },
     { path: "/mypage", label: "마이페이지", icon: MyPageIcon, onClick: () => navigate("/mypage") },
   ];
 
   const isActive = (path) => {
-    if (path === "/") {
-      return location.pathname === "/";
+    if (path === "/home") {
+      return location.pathname === "/home";
     }
     return location.pathname.startsWith(path);
   };

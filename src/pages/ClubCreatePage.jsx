@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useCreateClub from "../features/club/hooks/useCreateClub.js";
+import { useAuth } from "../features/auth/useAuth.js";
 import ProgressBar from "../components/ProgressBar.jsx";
 
 const Container = styled.div`
@@ -51,8 +52,8 @@ const ProgressBarWrapper = styled.div`
 
 const Title = styled.p`
   font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-weight: 600;
-  font-size: 24px;
+  font-weight: 500;
+  font-size: 20px;
   line-height: 26px;
   color: #cfcfcf;
   margin: 0;
@@ -202,6 +203,7 @@ const CreateButton = styled.button`
 export default function ClubCreatePage() {
   const navigate = useNavigate();
   const { create, loading: isSubmitting } = useCreateClub();
+  const { reloadUser } = useAuth();
   const [step, setStep] = useState(1); // 1: 이름 입력, 2: 설명 입력
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -246,6 +248,14 @@ export default function ClubCreatePage() {
 
     try {
       const response = await create(requestData);
+      
+      // 동아리 생성 성공 후 사용자 프로필을 다시 불러와서 동아리 목록 갱신
+      try {
+        await reloadUser();
+      } catch (reloadError) {
+        console.warn('사용자 프로필 재로드 실패 (무시됨):', reloadError);
+        // 프로필 재로드 실패해도 동아리 생성은 성공했으므로 계속 진행
+      }
       
       // 생성 성공 시 동아리 페이지로 이동
       if (response.clubId) {

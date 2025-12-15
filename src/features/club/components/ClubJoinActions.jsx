@@ -71,10 +71,9 @@ const PraiseButton = styled(ActionButton)`
 /**
  * 동아리 가입 액션 버튼 컴포넌트
  * @param {object} club - 동아리 정보
- * @param {boolean} isMember - 멤버 여부 (칭찬하러 가기 버튼 활성화 여부)
  * @param {function} onStatusChange - requestStatus가 변경될 때 호출되는 콜백 함수
  */
-export default function ClubJoinActions({ club, isMember = false, onStatusChange }) {
+export default function ClubJoinActions({ club, onStatusChange }) {
   const navigate = useNavigate();
   const [requestStatus, setRequestStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -106,10 +105,8 @@ export default function ClubJoinActions({ club, isMember = false, onStatusChange
     }
   };
 
-  const handleGoToPraise = () => {
-    if (isMember) {
-      navigate("/praise");
-    }
+  const handleGoToHome = () => {
+    navigate("/home");
   };
 
   const isPending = requestStatus === "PENDING";
@@ -123,8 +120,8 @@ export default function ClubJoinActions({ club, isMember = false, onStatusChange
       >
         {isLoading ? "요청 중..." : isPending ? "승인 대기 중" : "멤버 요청하기"}
       </RequestButton>
-      <PraiseButton disabled={!isMember} onClick={handleGoToPraise}>
-        칭찬하러 가기
+      <PraiseButton onClick={handleGoToHome}>
+        홈으로
       </PraiseButton>
     </Container>
   );

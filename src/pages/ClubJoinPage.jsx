@@ -169,8 +169,6 @@ export default function ClubJoinPage() {
     );
   }
 
-  // TODO: 실제 멤버 여부 확인 로직 (현재는 false로 설정)
-  const isMember = false;
   const isPending = requestStatus === "PENDING";
 
   return (
@@ -196,7 +194,6 @@ export default function ClubJoinPage() {
       <ActionsContainer>
         <ClubJoinActions 
           club={club} 
-          isMember={isMember} 
           onStatusChange={handleStatusChange}
         />
       </ActionsContainer>

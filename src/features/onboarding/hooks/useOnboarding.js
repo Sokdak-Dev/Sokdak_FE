@@ -215,7 +215,7 @@ export default function useOnboarding() {
           // 자동 로그인 성공 시 홈으로 이동
           // localStorage에서 온보딩 데이터 삭제
           localStorage.removeItem(STORAGE_KEY);
-          navigate('/');
+          navigate('/home');
           return;
         } catch {
           // 로그인 실패 시 로그인 페이지로 이동
@@ -228,7 +228,7 @@ export default function useOnboarding() {
 
       // 회원가입만 성공하고 자동 로그인을 시도하지 않은 경우 홈으로 이동
       localStorage.removeItem(STORAGE_KEY);
-      navigate('/');
+      navigate('/home');
     } catch (err) {
       console.error('회원가입 실패:', err);
       setError(err);

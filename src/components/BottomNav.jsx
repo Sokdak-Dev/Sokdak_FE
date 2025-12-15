@@ -159,22 +159,42 @@ export default function BottomNav() {
   const location = useLocation();
   const { selectedClub, userClubs } = useSelectedClub();
 
+  const handleNavigation = (targetPath) => {
+    // 현재 경로와 다른 경우에만 새로고침
+    if (location.pathname !== targetPath && !location.pathname.startsWith(targetPath)) {
+      navigate(targetPath);
+      window.location.reload();
+    }
+  };
+
   const handleClubClick = () => {
     // 선택된 동아리가 있으면 그 동아리로, 없으면 첫 번째 동아리로 이동
     const clubId = selectedClub?.id || (userClubs.length > 0 ? userClubs[0].id : null);
     if (clubId) {
-      navigate(`/club/${clubId}`);
+      const targetPath = `/club/${clubId}`;
+      // 동아리 페이지는 경로가 /club으로 시작하는지 확인
+      if (!location.pathname.startsWith("/club")) {
+        navigate(targetPath);
+        window.location.reload();
+      } else if (location.pathname !== targetPath) {
+        navigate(targetPath);
+        window.location.reload();
+      }
     } else {
       // 동아리가 없으면 빈 상태 페이지로 이동
-      navigate(`/club`);
+      const targetPath = `/club`;
+      if (location.pathname !== targetPath) {
+        navigate(targetPath);
+        window.location.reload();
+      }
     }
   };
 
   const navItems = [
-    { path: "/home", label: "홈", icon: HomeIcon, onClick: () => navigate("/home") },
-    { path: "/ranking", label: "랭킹", icon: RankingIcon, onClick: () => navigate("/ranking") },
+    { path: "/home", label: "홈", icon: HomeIcon, onClick: () => handleNavigation("/home") },
+    { path: "/ranking", label: "랭킹", icon: RankingIcon, onClick: () => handleNavigation("/ranking") },
     { path: "/club", label: "동아리", icon: ClubIcon, onClick: handleClubClick },
-    { path: "/mypage", label: "마이페이지", icon: MyPageIcon, onClick: () => navigate("/mypage") },
+    { path: "/mypage", label: "마이페이지", icon: MyPageIcon, onClick: () => handleNavigation("/mypage") },
   ];
 
   const isActive = (path) => {

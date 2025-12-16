@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import ClubSelector from "../components/ClubSelector/ClubSelector.jsx";
 import { useSelectedClub } from "../features/club/useSelectedClub.js";
 
@@ -27,6 +27,51 @@ const Header = styled.div`
   padding-left: 35px;
   padding-right: 35px;
   padding-bottom: 20px;
+`;
+
+// 둥둥 떠다니는 애니메이션
+const float = keyframes`
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-25px);
+  }
+`;
+
+// 둥둥 떠다니는 애니메이션 (뒤집힌 버전)
+const floatFlipped = keyframes`
+  0%, 100% {
+    transform: translateY(0px) scaleX(-1);
+  }
+  50% {
+    transform: translateY(-25px) scaleX(-1);
+  }
+`;
+
+const BubbleIconsContainer = styled.div`
+  position: fixed;
+  left: 50%;
+  top: 40%; /* 화면 중앙 위쪽에 배치 */
+  transform: translateX(-50%) translateY(-50%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+  z-index: 10;
+`;
+
+const BubbleIcon = styled.img`
+  width: auto;
+  height: ${(props) => props.$height || 60}px;
+  object-fit: contain;
+  pointer-events: none;
+  animation: ${(props) => (props.$flip ? floatFlipped : float)} 3s ease-in-out infinite;
+  animation-delay: ${(props) => props.$delay || 0}s;
+  animation-fill-mode: both;
+  align-self: ${(props) => props.$alignSelf || 'flex-start'};
+  margin-top: ${(props) => props.$topOffset || 0}px;
+  margin-left: ${(props) => props.$leftOffset || 0}px;
 `;
 
 const PraiseButton = styled.button`
@@ -198,6 +243,31 @@ export default function HomePage() {
           onClubChange={handleClubChange}
         />
       </Header>
+      <BubbleIconsContainer>
+        <BubbleIcon 
+          src="/assets/yellow-bubble.svg" 
+          alt="Yellow bubble" 
+          $delay={0.9} 
+          $height={120}
+          $topOffset={50}
+        />
+        <BubbleIcon 
+          src="/assets/orenge-smile.svg" 
+          alt="Orange smile" 
+          $delay={0.3} 
+          $height={100}
+          $topOffset={180}
+        />
+        <BubbleIcon 
+          src="/assets/blue-bubble.png" 
+          alt="Blue bubble" 
+          $delay={0} 
+          $flip 
+          $height={80}
+          $topOffset={70}
+          $leftOffset={-30}
+        />
+      </BubbleIconsContainer>
       <PraiseButton onClick={handlePraiseClick}>
         칭찬하러 가기
       </PraiseButton>
